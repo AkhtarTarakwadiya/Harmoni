@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Default profile image if not provided
         if (empty($user_profile_photo)) {
-            $user_profile_photo = "./uploads/default.jpg";  // Set default image path
+            $user_profile_photo = "/uploads/default.jpg";  // Set default image path
         }
 
         $user_bio = isset($_POST['user_bio']) ? trim($_POST['user_bio']) : null;
