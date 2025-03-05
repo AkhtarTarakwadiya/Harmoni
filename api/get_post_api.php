@@ -11,10 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $limit = 5; // Number of posts per page
         $offset = ($page - 1) * $limit;
 
-        // Fetch only posts where status = 1
-        $fetchPostsQuery = "SELECT p.post_id, p.user_id, p.post_content, p.created_at, 
+        // Fetch posts along with the username from the users table
+        $fetchPostsQuery = "SELECT p.post_id, p.user_id, u.user_name, p.post_content, p.created_at, 
                             GROUP_CONCAT(pm.media) AS media_files
                             FROM posts p
+                            LEFT JOIN user_master u ON p.user_id = u.user_id
                             LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
                             WHERE p.post_status = 1
                             GROUP BY p.post_id 
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $posts[] = [
                         "post_id" => (int)$row['post_id'],
                         "user_id" => (int)$row['user_id'],
+                        "username" => htmlspecialchars($row['user_name']), // Fetch and sanitize username
                         "post_content" => htmlspecialchars($row['post_content']), // Prevent XSS
                         "created_at" => $row['created_at'],
                         "media_files" => $mediaFiles
@@ -73,3 +75,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 echo json_encode($response);
+?>
