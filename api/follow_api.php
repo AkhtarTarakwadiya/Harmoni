@@ -1,5 +1,7 @@
 <?php
-include '../db.php';
+
+include '../database/config.php';
+
 
 $response = array();
 
