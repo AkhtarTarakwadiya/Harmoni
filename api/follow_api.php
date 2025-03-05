@@ -8,7 +8,7 @@ $response = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "follow_method") {
         
-        // Collect Input Data
+        // Collect Input Data...
         $follower_id = isset($_POST['follower_id']) ? trim($_POST['follower_id']) : '';
         $following_id = isset($_POST['following_id']) ? trim($_POST['following_id']) : '';
 
