@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 while ($row = mysqli_fetch_assoc($result)) {
                     // Ensure proper format for media files
                     $mediaFiles = !empty($row['media_files'])
-                        ? array_map(fn($file) => "http://localhost/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
+                        ? array_map(fn($file) => "http://192.168.4.220/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
                         : [];
 
                     $posts[] = [
