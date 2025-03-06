@@ -30,11 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Check if user exists
-        $query = "SELECT user_id, user_name, user_full_name, user_email, user_password, user_profile_photo FROM user_master WHERE user_email = '$user_email'";
+        $query = "SELECT user_id, user_name, user_full_name, user_email, user_password,user_phone_number,gender,user_bio, user_profile_photo, user_status, user_isblock FROM user_master WHERE user_email = '$user_email'";
         $result = mysqli_query($conn, $query);
 
         if (mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
+
+            // Check if account is active
+            if ($user['user_status'] == 0) {
+                $response = [
+                    "status" => "201",
+                    "message" => "Your Account Not Found."
+                ];
+                echo json_encode($response);
+                exit();
+            }
+
+            // Check if account is blocked
+            if ($user['user_isblock'] == 0) {
+                $response = [
+                    "status" => "201",
+                    "message" => "Your Account is disabled by the admin."
+                ];
+                echo json_encode($response);
+                exit();
+            }
 
             // Verify password
             if (password_verify($user_password, $user['user_password'])) {
@@ -46,7 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "user_name" => $user['user_name'],
                         "user_full_name" => $user['user_full_name'],
                         "user_email" => $user['user_email'],
-                        "user_profile_photo" =>"http://192.168.4.220/Harmoni" . $user['user_profile_photo']
+                        "user_phone_number" => $user['user_phone_number'],
+                        "gender" => $user['gender'],
+                        "user_bio" => $user['user_bio'],
+                        "user_profile_photo" => "http://192.168.4.220/Harmoni" . $user['user_profile_photo']
                     ]
                 ];
             } else {
