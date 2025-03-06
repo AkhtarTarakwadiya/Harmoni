@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "user_email" => $user['user_email'],
                         "user_phone_number" => $user['user_phone_number'],
                         "gender" => $user['gender'],
-                        "user_bio" => $user['user_bio'],
-                        "user_profile_photo" => "http://192.168.4.220/Harmoni" . $user['user_profile_photo']
+                        // "user_bio" => $user['user_bio'],
+                        // "user_profile_photo" => "http://192.168.4.220/Harmoni" . $user['user_profile_photo']
                     ]
                 ];
             } else {
