@@ -3,8 +3,21 @@
 include './database/db.php';
 
 // Fetch user data
-$sql = "SELECT user_name, user_full_name, user_email, gender, user_profile_photo, user_bio FROM user_master WHERE user_status = 1 AND user_isblock = 1";
+$sql = "SELECT 
+            user_name, 
+            user_full_name, 
+            user_email, 
+            gender, 
+            user_profile_photo, 
+            user_bio,  -- Missing comma was here
+            (SELECT COUNT(*) FROM posts WHERE user_id = u.user_id AND post_status = 1) AS total_posts,
+            (SELECT COUNT(*) FROM follow_master WHERE following_id = u.user_id) AS total_followers,
+            (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following 
+        FROM user_master u 
+        WHERE user_status = 1 AND user_isblock = 1";
+
 $result = mysqli_query($conn, $sql);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +63,7 @@ $result = mysqli_query($conn, $sql);
             <div id="content">
 
                 <!-- Topbar -->
-               <?php include 'common/nav.php'; ?>
+                <?php include 'common/nav.php'; ?>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -73,6 +86,9 @@ $result = mysqli_query($conn, $sql);
                                     <div class="email"><?php echo htmlspecialchars($row['user_email']); ?></div>
                                     <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
                                     <div class="gender">Gender: <?php echo ucfirst($row['gender']); ?></div>
+                                    <div class="gender">Total Post: <?php echo ucfirst($row['total_posts']); ?></div>
+                                    <div class="gender">Followers: <?php echo ucfirst($row['total_followers']); ?></div>
+                                    <div class="gender">Following: <?php echo ucfirst($row['total_following']); ?></div>
                                 </div>
                             </div>
                         <?php } ?>
