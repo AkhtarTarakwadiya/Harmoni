@@ -1,5 +1,5 @@
 <?php
-include 'config/db.php';
+include 'database/db.php';
 
 // Fetch user data from user_master table
 $sql = "SELECT * FROM user_master WHERE user_status = 1";
@@ -55,7 +55,7 @@ $result = mysqli_query($conn, $sql);
 
                                     <tr>
                                         <td><?php echo $row['user_id']; ?></td>
-                                        <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic" height="50" width="50">
+                                        <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic">
                                         </td>
                                         <td>@<?php echo htmlspecialchars($row['user_name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['user_full_name']); ?></td>

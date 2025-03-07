@@ -1,6 +1,6 @@
 <?php
-include 'config/db.php';
-// include './database/db.php';
+// include 'config/db.php';
+include './database/db.php';
 
 // Fetch user data
 $sql = "SELECT 
