@@ -5,13 +5,13 @@
     padding: 20px;
     text-align: center;
     transition: transform 0.3s ease-in-out;
+    position: relative;
+    color: #333;
 }
-
 .profile-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
-
 .profile-pic {
     width: 100px;
     height: 100px;
@@ -19,40 +19,55 @@
     object-fit: cover;
     border: 3px solid #007bff;
 }
-
 .username {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: #007bff;
     margin-top: 10px;
+    color: #007bff;
 }
-
 .fullname {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    color: #333;
+    margin-top: 5px;
 }
-
 .email {
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
+    margin-top: 5px;
 }
-
 .bio {
     font-size: 14px;
+    font-style: italic;
     color: #555;
-    margin-top: 10px;
+    margin-top: 5px;
 }
-
 .gender {
     font-size: 14px;
     font-weight: bold;
-    color: #555;
-    background: #e9ecef;
+    background: #f8f9fa;
     display: inline-block;
     padding: 5px 10px;
     border-radius: 8px;
     margin-top: 10px;
+}
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+}
+.stats div {
+    text-align: center;
+}
+.stats span {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
 }
 
 .dataTables_wrapper {

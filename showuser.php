@@ -1,6 +1,6 @@
 <?php
-// include 'config/db.php';
-include './database/db.php';
+include 'config/db.php';
+// include './database/db.php';
 
 // Fetch user data
 $sql = "SELECT 
@@ -77,22 +77,24 @@ $result = mysqli_query($conn, $sql);
                     </div>
 
                     <div class="row">
-                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="profile-card">
-                                    <img src="/Harmoni<?php echo $row['user_profile_photo']; ?>" class="profile-pic" alt="Profile Pic">
-                                    <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
-                                    <div class="fullname"><?php echo htmlspecialchars($row['user_full_name']); ?></div>
-                                    <div class="email"><?php echo htmlspecialchars($row['user_email']); ?></div>
-                                    <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
-                                    <div class="gender">Gender: <?php echo ucfirst($row['gender']); ?></div>
-                                    <div class="gender">Total Post: <?php echo ucfirst($row['total_posts']); ?></div>
-                                    <div class="gender">Followers: <?php echo ucfirst($row['total_followers']); ?></div>
-                                    <div class="gender">Following: <?php echo ucfirst($row['total_following']); ?></div>
-                                </div>
-                            </div>
-                        <?php } ?>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="profile-card">
+                        <img src="Harmoni/<?php echo htmlspecialchars($row['user_profile_photo']); ?>" class="profile-pic" alt="Profile Pic">
+                        <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
+                        <div class="fullname"><?php echo htmlspecialchars($row['user_full_name']); ?></div>
+                        <div class="gender">Gender: <?php echo htmlspecialchars($row['gender']); ?></div>
+                        <div class="email">Email: <?php echo htmlspecialchars($row['user_email']); ?></div>
+                        <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
+                        <div class="stats">
+                            <div><span><?php echo $row['total_posts']; ?></span> Posts</div>
+                            <div><span><?php echo $row['total_followers']; ?></span> Followers</div>
+                            <div><span><?php echo $row['total_following']; ?></span> Following</div>
+                        </div>
                     </div>
+                </div>
+            <?php } ?>
+        </div>
                 </div>
                 <!-- /.container-fluid -->
 
