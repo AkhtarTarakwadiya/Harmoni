@@ -4,7 +4,9 @@ include '../database/config.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['method']) && $_POST['method'] === "fetch_posts") {
+    if (isset($_POST['method']) && $_POST['method'] === "fetch_posts" && isset($_POST['user_id'])) {
+        $user_id = intval($_POST['user_id']); // Logged-in user ID
+
         $fetchPostsQuery = "SELECT 
                                 p.post_id, 
                                 p.user_id, 
@@ -19,7 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
                             LEFT JOIN likes_master pl ON p.post_id = pl.post_id
                             LEFT JOIN comments_master pc ON p.post_id = pc.post_id
-                            WHERE p.post_status = 1
+                            JOIN follow_master f ON p.user_id = f.following_id
+                            WHERE p.post_status = 1 AND f.follower_id = $user_id
                             GROUP BY p.post_id 
                             ORDER BY p.created_at DESC";
 
@@ -92,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $response = [
             "status" => "201",
-            "message" => "Invalid Request Method"
+            "message" => "Invalid Request or Missing User ID"
         ];
     }
 } else {
