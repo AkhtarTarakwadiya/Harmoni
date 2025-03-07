@@ -1,8 +1,10 @@
 <?php
-    include 'config/db.php';
-    // Fetch user data
-    $sql = "SELECT user_name, user_full_name, user_email, gender, user_profile_photo, user_bio FROM user_master WHERE user_status = 1 AND user_isblock = 1";
-    $result = mysqli_query($conn, $sql);
+// include 'config/db.php';
+include './database/db.php';
+
+// Fetch user data
+$sql = "SELECT user_name, user_full_name, user_email, gender, user_profile_photo, user_bio FROM user_master WHERE user_status = 1 AND user_isblock = 1";
+$result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,77 +39,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon">
-                    <img src="img/logo-removebg-preview.png" alt="LOGO" style="width: 60px; height: 60px;">
-                </div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Users</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Actions:</h6>
-                        <a class="collapse-item" href="showuser.php">Show Users</a>
-                        <a class="collapse-item" href="manageuser.php">Manage Users</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Posts</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Post Utilities:</h6>
-                        <a class="collapse-item" href="showpost.php">Show Posts</a>
-                        <a class="collapse-item" href="managepost.php">Manage Posts</a>
-                    </div>
-                </div>
-            </li>
-
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
+        <?php include 'common/side.php'; ?>
         <!-- End of Sidebar -->
 
 
@@ -118,52 +50,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <!-- <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form> -->
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
+               <?php include 'common/nav.php'; ?>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -177,19 +64,19 @@
                     </div>
 
                     <div class="row">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="profile-card">
-                        <img src="http/192.168.4.220/Harmoni<?php echo htmlspecialchars($row['user_profile_photo']); ?>" class="profile-pic" alt="Profile Pic">
-                        <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
-                        <div class="fullname"><?php echo htmlspecialchars($row['user_full_name']); ?></div>
-                        <div class="email"><?php echo htmlspecialchars($row['user_email']); ?></div>
-                        <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
-                        <div class="gender">Gender: <?php echo ucfirst($row['gender']); ?></div>
+                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="profile-card">
+                                    <img src="/Harmoni<?php echo $row['user_profile_photo']; ?>" class="profile-pic" alt="Profile Pic">
+                                    <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
+                                    <div class="fullname"><?php echo htmlspecialchars($row['user_full_name']); ?></div>
+                                    <div class="email"><?php echo htmlspecialchars($row['user_email']); ?></div>
+                                    <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
+                                    <div class="gender">Gender: <?php echo ucfirst($row['gender']); ?></div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
-                </div>
-            <?php } ?>
-        </div>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -197,13 +84,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Harmoni 2025</span>
-                    </div>
-                </div>
-            </footer>
+            <?php include 'common/footer.php'; ?>
             <!-- End of Footer -->
 
         </div>
@@ -221,7 +102,7 @@
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-        <div class="modal-content">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
