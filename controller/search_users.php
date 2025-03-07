@@ -23,9 +23,14 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     echo '<div class="row">'; 
     while ($row = mysqli_fetch_assoc($result)) {
+        // Set profile image URL
+        $profileImage = !empty($row['user_profile_photo']) ?
+            "http://192.168.4.220/Harmoni" . $row['user_profile_photo'] :
+            "http://192.168.4.220/Harmoni/uploads/default_profile.png";
+        
         echo '<div class="col-lg-4 col-md-6 mb-4">
                 <div class="profile-card">
-                    <img src="Harmoni/' . htmlspecialchars($row['user_profile_photo']) . '" class="profile-pic" alt="Profile Pic">
+                    <img src="' . htmlspecialchars($profileImage) . '" class="profile-pic" alt="Profile Pic">
                     <div class="username">@' . htmlspecialchars($row['user_name']) . '</div>
                     <div class="fullname">' . htmlspecialchars($row['user_full_name']) . '</div>
                     <div class="gender">Gender: ' . htmlspecialchars($row['gender']) . '</div>
