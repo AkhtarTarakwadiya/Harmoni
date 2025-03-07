@@ -9,12 +9,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = trim($_POST['user_id']);
         $old_password = trim($_POST['old_password']);
         $new_password = trim($_POST['new_password']);
+        $confirm_password = trim($_POST['confirm_password']);
 
         // Validation
-        if (empty($user_id) || empty($old_password) || empty($new_password)) {
+        if (empty($user_id) || empty($old_password) || empty($new_password) || empty($confirm_password)) {
             $response = [
                 "status" => "201",
                 "message" => "All fields are required."
+            ];
+            echo json_encode($response);
+            exit();
+        }
+
+        // Check if new password and confirm password match
+        if ($new_password !== $confirm_password) {
+            $response = [
+                "status" => "201",
+                "message" => "Password doesn't match."
             ];
             echo json_encode($response);
             exit();
@@ -26,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
-            
+
             // Verify old password
             if (!password_verify($old_password, $user['user_password'])) {
                 $response = [
