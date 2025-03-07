@@ -1,3 +1,9 @@
+<?php
+    include 'config/db.php';
+    // Fetch user data
+    $sql = "SELECT user_name, user_full_name, user_email, gender, user_profile_photo, user_bio FROM user_master WHERE user_status = 1 AND user_isblock = 1";
+    $result = mysqli_query($conn, $sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -171,66 +177,19 @@
                     </div>
 
                     <div class="row">
-                        <!-- User 1 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="profile-card">
-                                <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-pic" alt="Profile Pic">
-                                <div class="username">@john_doe</div>
-                                <div class="fullname">John Doe</div>
-                                <div class="email">johndoe@example.com</div>
-                                <div class="bio">Passionate about web development and AI.</div>
-                                <div class="gender">Male</div>
-                            </div>
-                        </div>
-
-                        <!-- User 2 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="profile-card">
-                                <img src="https://randomuser.me/api/portraits/women/2.jpg" class="profile-pic" alt="Profile Pic">
-                                <div class="username">@jane_smith</div>
-                                <div class="fullname">Jane Smith</div>
-                                <div class="email">janesmith@example.com</div>
-                                <div class="bio">Designer & Creative Thinker.</div>
-                                <div class="gender">Female</div>
-                            </div>
-                        </div>
-
-                        <!-- User 3 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="profile-card">
-                                <img src="https://randomuser.me/api/portraits/men/3.jpg" class="profile-pic" alt="Profile Pic">
-                                <div class="username">@michael_brown</div>
-                                <div class="fullname">Michael Brown</div>
-                                <div class="email">michael@example.com</div>
-                                <div class="bio">Tech enthusiast & Blogger.</div>
-                                <div class="gender">Male</div>
-                            </div>
-                        </div>
-
-                        <!-- User 4 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="profile-card">
-                                <img src="https://randomuser.me/api/portraits/women/4.jpg" class="profile-pic" alt="Profile Pic">
-                                <div class="username">@emily_davis</div>
-                                <div class="fullname">Emily Davis</div>
-                                <div class="email">emily@example.com</div>
-                                <div class="bio">Loves photography & travel.</div>
-                                <div class="gender">Female</div>
-                            </div>
-                        </div>
-
-                        <!-- User 5 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="profile-card">
-                                <img src="https://randomuser.me/api/portraits/men/5.jpg" class="profile-pic" alt="Profile Pic">
-                                <div class="username">@david_wilson</div>
-                                <div class="fullname">David Wilson</div>
-                                <div class="email">david@example.com</div>
-                                <div class="bio">Fitness Coach & Health Blogger.</div>
-                                <div class="gender">Male</div>
-                            </div>
-                        </div>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="profile-card">
+                        <img src="http/192.168.4.220/Harmoni<?php echo htmlspecialchars($row['user_profile_photo']); ?>" class="profile-pic" alt="Profile Pic">
+                        <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
+                        <div class="fullname"><?php echo htmlspecialchars($row['user_full_name']); ?></div>
+                        <div class="email"><?php echo htmlspecialchars($row['user_email']); ?></div>
+                        <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
+                        <div class="gender">Gender: <?php echo ucfirst($row['gender']); ?></div>
                     </div>
+                </div>
+            <?php } ?>
+        </div>
                 </div>
                 <!-- /.container-fluid -->
 
