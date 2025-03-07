@@ -1,254 +1,164 @@
+<?php
+include 'config/db.php';
+
+// Fetch user data from user_master table
+$sql = "SELECT * FROM user_master WHERE user_status = 1";
+$result = mysqli_query($conn, $sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Harmoni Admin - Manage Users</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <body id="page-top">
-
-    <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
-            <?php include 'common/side.php'; ?>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
+        <?php include 'common/side.php'; ?>
         <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
                 <?php include 'common/nav.php'; ?>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Manage Users</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
-
                     <div class="dataTables_wrapper">
-                        <table id="datatable">
+                        <table id="datatable" class="display nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Profile Pic</th>
+                                    <th>Username</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Country</th>
-                                    <th>Joined</th>
+                                    <th>Phone</th>
+                                    <th>Gender</th>
+                                    <th>Bio</th>
+                                    <th>Block</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
+                                <?php while ($row = mysqli_fetch_assoc($result)) {
+
+                                    $profileImage = !empty($row['user_profile_photo']) ?
+                                        "http://192.168.4.220/Harmoni" . $row['user_profile_photo'] :
+                                        "http://192.168.4.220/Harmoni/uploads/default_profile.png";
+                                ?>
+
+                                    <tr>
+                                        <td><?php echo $row['user_id']; ?></td>
+                                        <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic" height="50" width="50">
+                                        </td>
+                                        <td>@<?php echo htmlspecialchars($row['user_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_full_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_email']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_phone_number']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['gender']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></td>
+                                        <td>
+                                            <label class="switch">
+                                                <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 1) ? 'checked' : ''; ?>>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <a href="edit_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="delete_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-                <?php include 'common/footer.php'; ?>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Press the "Logout" button if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
+            <?php include 'common/footer.php'; ?>
         </div>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
-    <!-- jQuery (Must be before DataTables) -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
-    <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
     <script>
         $(document).ready(function() {
-            $('#datatable').DataTable();
-            scrollX: true
+            $('#datatable').DataTable({
+                scrollX: true
+            });
+
+            $('.block-toggle').on('change', function() {
+                let userId = $(this).data('id');
+                let isBlocked = $(this).prop('checked') ? 1 : 0;
+
+                $.ajax({
+                    url: 'update_block_status.php',
+                    method: 'POST',
+                    data: {
+                        user_id: userId,
+                        user_isblock: isBlocked
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            });
         });
     </script>
 
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #007bff;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(14px);
+        }
+    </style>
 </body>
 
 </html>
