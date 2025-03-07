@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_path = $upload_dir . $file_name;
 
             if (move_uploaded_file($_FILES['user_profile_photo']['tmp_name'], $file_path)) {
-                $user_profile_photo = "/Harmoni/uploads/" . $file_name; // Store relative path
+                $user_profile_photo = "/uploads/" . $file_name; // Store relative path
             } else {
                 $response = [
                     "status" => "201",
@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
         }
-
 
         // Validation
         if (empty($user_id) || empty($user_name) || empty($user_full_name) || empty($user_email) || empty($user_phone_number) || empty($gender)) {
@@ -77,8 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $existingUser = mysqli_fetch_assoc($result);
-        if (!empty($user_profile_photo) && !empty($existingUser['user_profile_photo']) && file_exists($existingUser['user_profile_photo'])) {
-            unlink($existingUser['user_profile_photo']); // Delete old profile photo
+        $existing_photo_path = $_SERVER['DOCUMENT_ROOT'] . $existingUser['user_profile_photo'];
+
+        // Delete old profile photo if new one is uploaded
+        if (!empty($user_profile_photo) && !empty($existingUser['user_profile_photo']) && file_exists($existing_photo_path)) {
+            unlink($existing_photo_path);
         }
 
         // Check for duplicate username, email, or phone (excluding current user)
