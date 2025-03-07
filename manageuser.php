@@ -17,6 +17,55 @@ $result = mysqli_query($conn, $sql);
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="css/style.css">
+
+
+    <style>
+        /* Manage user page css */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #007bff;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(14px);
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -88,6 +137,10 @@ $result = mysqli_query($conn, $sql);
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <!-- Include SweetAlert -->
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -95,70 +148,50 @@ $result = mysqli_query($conn, $sql);
             });
 
             $('.block-toggle').on('change', function() {
-                let userId = $(this).data('id');
-                let isBlocked = $(this).prop('checked') ? 1 : 0;
+                let toggleButton = $(this);
+                let userId = toggleButton.data('id');
+                let isBlocked = toggleButton.prop('checked') ? 1 : 0;
+                let actionText = isBlocked ? "User has been blocked" : "User has been unblocked";
 
                 $.ajax({
-                    url: 'update_block_status.php',
+                    url: 'ajax/update_block_status.php',
                     method: 'POST',
                     data: {
                         user_id: userId,
                         user_isblock: isBlocked
                     },
+                    dataType: 'json',
                     success: function(response) {
-                        console.log(response);
+                        if (response.status === "success") {
+                            Swal.fire({
+                                icon: "success",
+                                title: actionText,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: response.message
+                            });
+                            toggleButton.prop('checked', !isBlocked); // Revert toggle on error
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Something went wrong. Try again!"
+                        });
+                        toggleButton.prop('checked', !isBlocked); // Revert toggle on error
                     }
                 });
             });
         });
     </script>
 
-    <style>
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 34px;
-            height: 20px;
-        }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 20px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked+.slider {
-            background-color: #007bff;
-        }
-
-        input:checked+.slider:before {
-            transform: translateX(14px);
-        }
-    </style>
 </body>
 
 </html>
