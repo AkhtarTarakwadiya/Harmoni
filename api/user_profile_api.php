@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "phone_number" => htmlspecialchars($userData['user_phone_number']),
                     "gender" => htmlspecialchars($userData['gender']),
                     "profile_pic" => $userData['user_profile_photo'] 
-                        ? "http://192.168.4.220/Harmoni/uploads/profile/" . $userData['user_profile_photo'] 
+                        ? "http://192.168.4.220/Harmoni" . $userData['user_profile_photo'] 
                         : null,
                     "bio" => htmlspecialchars($userData['user_bio']),
                     "total_posts" => (int)$userData['total_posts'],
