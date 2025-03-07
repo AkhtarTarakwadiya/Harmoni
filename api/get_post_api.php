@@ -5,10 +5,6 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "fetch_posts") {
-        $page = isset($_POST['page']) && ctype_digit($_POST['page']) ? intval($_POST['page']) : 1;
-        $limit = 5;
-        $offset = ($page - 1) * $limit;
-
         $fetchPostsQuery = "SELECT 
                                 p.post_id, 
                                 p.user_id, 
@@ -25,8 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             LEFT JOIN comments_master pc ON p.post_id = pc.post_id
                             WHERE p.post_status = 1
                             GROUP BY p.post_id 
-                            ORDER BY p.created_at DESC 
-                            LIMIT $limit OFFSET $offset";
+                            ORDER BY p.created_at DESC";
 
         $result = mysqli_query($conn, $fetchPostsQuery);
 
