@@ -114,14 +114,14 @@ $result = mysqli_query($conn, $sql);
                                         <td><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></td>
                                         <td>
                                             <label class="switch">
-                                            <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 0) ? 'checked' : ''; ?>>
+                                                <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 0) ? 'checked' : ''; ?>>
 
                                                 <span class="slider round"></span>
                                             </label>
                                         </td>
                                         <td>
                                             <a href="edit_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                            <a href="delete_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                            <a href="#" class="btn btn-danger btn-sm delete-user" data-id="<?php echo $row['user_id']; ?>">Delete</a>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -144,69 +144,118 @@ $result = mysqli_query($conn, $sql);
 
     <script>
         $(document).ready(function() {
-    $('#datatable').DataTable({
-        scrollX: true
-    });
+            $('#datatable').DataTable({
+                scrollX: true
+            });
 
-    $('.block-toggle').on('change', function() {
-        let toggleButton = $(this);
-        let userId = toggleButton.data('id');
-        let isBlocked = toggleButton.prop('checked') ? 0 : 1; // Reversed logic
+            $('.block-toggle').on('change', function() {
+                let toggleButton = $(this);
+                let userId = toggleButton.data('id');
+                let isBlocked = toggleButton.prop('checked') ? 0 : 1; // Reversed logic
 
-        let actionText = isBlocked ? "unblock" : "block";
+                let actionText = isBlocked ? "unblock" : "block";
 
-        Swal.fire({
-            title: `Are you sure?`,
-            text: `You want to ${actionText} this user?`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: `Yes, ${actionText} it!`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Proceed with AJAX request
-                $.ajax({
-                    url: 'ajax/update_block_status.php',
-                    method: 'POST',
-                    data: {
-                        user_id: userId,
-                        user_isblock: isBlocked
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === "success") {
-                            Swal.fire({
-                                icon: "success",
-                                title: `User has been ${actionText}ed`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Error",
-                                text: response.message
-                            });
-                            toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Something went wrong. Try again!"
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `You want to ${actionText} this user?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: `Yes, ${actionText} it!`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with AJAX request
+                        $.ajax({
+                            url: 'ajax/update_block_status.php',
+                            method: 'POST',
+                            data: {
+                                user_id: userId,
+                                user_isblock: isBlocked
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status === "success") {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: `User has been ${actionText}ed`,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Error",
+                                        text: response.message
+                                    });
+                                    toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Something went wrong. Try again!"
+                                });
+                                toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
+                            }
                         });
-                        toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
+                    } else {
+                        toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle if canceled
                     }
                 });
-            } else {
-                toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle if canceled
-            }
-        });
-    });
-});
+            });
+            $('.delete-user').on('click', function(e) {
+                e.preventDefault();
+                let deleteButton = $(this);
+                let userId = deleteButton.data('id');
 
+                Swal.fire({
+                    title: "Are You Sure?",
+                    text: "You want to Delete this user?",
+                    icon: "Warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'ajax/delete_users.php',
+                            method: 'POST',
+                            data: {
+                                user_id: userId
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status === "success") {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "User Deleted Successfully!",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    setTimeout(() => location.reload(), 1500);
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Error",
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Something went wrong. Try again!"
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 
 
