@@ -88,9 +88,10 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                         ?>
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="post-card">
-                                    <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel">
+                                    <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             <?php if (!empty($mediaFiles)) {
+                                                $totalMedia = count($mediaFiles);
                                                 foreach ($mediaFiles as $index => $media) {
                                                     $fileExtension = pathinfo($media, PATHINFO_EXTENSION);
                                             ?>
@@ -103,11 +104,15 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                                 Your browser does not support the video tag.
                                                             </video>
                                                         <?php } ?>
+                                                        <div class="media-count-no">
+                                                            <span><?php echo ($index + 1) . "/" . $totalMedia; ?></span>
+                                                        </div>
                                                     </div>
                                                 <?php }
                                             } else { ?>
                                                 <div class="carousel-item active">
                                                     <img src="http://192.168.4.220/Harmoni/uploads/default.jpg" alt="No Image Available">
+                                                    <div class="media-count"><span>1/1</span></div>
                                                 </div>
                                             <?php } ?>
                                         </div>
@@ -137,6 +142,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                     <span class="see-more" onclick="toggleDescription('desc_<?php echo $post_id; ?>', this)">See More</span>
                                 </div>
                             </div>
+
                         <?php } ?>
                     </div>
                 </div>

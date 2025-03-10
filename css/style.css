@@ -135,6 +135,18 @@ table tbody tr:hover {
     border-radius: 8px;
 }
 
+.media-count-no {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+
 
 /* Remove default Bootstrap carousel button background */
 .carousel-control-prev,
