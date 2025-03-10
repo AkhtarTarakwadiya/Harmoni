@@ -104,7 +104,7 @@ $result = mysqli_query($conn, $sql);
 
                                     <tr>
                                         <td><?php echo $row['user_id']; ?></td>
-                                        <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic">
+                                        <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic" style="width: 50px; height: 50px">
                                         </td>
                                         <td>@<?php echo htmlspecialchars($row['user_name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['user_full_name']); ?></td>
@@ -114,7 +114,8 @@ $result = mysqli_query($conn, $sql);
                                         <td><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></td>
                                         <td>
                                             <label class="switch">
-                                                <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 1) ? 'checked' : ''; ?>>
+                                            <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 0) ? 'checked' : ''; ?>>
+
                                                 <span class="slider round"></span>
                                             </label>
                                         </td>
@@ -143,16 +144,28 @@ $result = mysqli_query($conn, $sql);
 
     <script>
         $(document).ready(function() {
-            $('#datatable').DataTable({
-                scrollX: true
-            });
+    $('#datatable').DataTable({
+        scrollX: true
+    });
 
-            $('.block-toggle').on('change', function() {
-                let toggleButton = $(this);
-                let userId = toggleButton.data('id');
-                let isBlocked = toggleButton.prop('checked') ? 1 : 0;
-                let actionText = isBlocked ? "User has been blocked" : "User has been unblocked";
+    $('.block-toggle').on('change', function() {
+        let toggleButton = $(this);
+        let userId = toggleButton.data('id');
+        let isBlocked = toggleButton.prop('checked') ? 0 : 1; // Reversed logic
 
+        let actionText = isBlocked ? "unblock" : "block";
+
+        Swal.fire({
+            title: `Are you sure?`,
+            text: `You want to ${actionText} this user?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: `Yes, ${actionText} it!`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with AJAX request
                 $.ajax({
                     url: 'ajax/update_block_status.php',
                     method: 'POST',
@@ -165,7 +178,7 @@ $result = mysqli_query($conn, $sql);
                         if (response.status === "success") {
                             Swal.fire({
                                 icon: "success",
-                                title: actionText,
+                                title: `User has been ${actionText}ed`,
                                 showConfirmButton: false,
                                 timer: 1500
                             });
@@ -175,7 +188,7 @@ $result = mysqli_query($conn, $sql);
                                 title: "Error",
                                 text: response.message
                             });
-                            toggleButton.prop('checked', !isBlocked); // Revert toggle on error
+                            toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
                         }
                     },
                     error: function() {
@@ -184,11 +197,16 @@ $result = mysqli_query($conn, $sql);
                             title: "Error",
                             text: "Something went wrong. Try again!"
                         });
-                        toggleButton.prop('checked', !isBlocked); // Revert toggle on error
+                        toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
                     }
                 });
-            });
+            } else {
+                toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle if canceled
+            }
         });
+    });
+});
+
     </script>
 
 
