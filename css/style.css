@@ -1,232 +1,262 @@
 /* show user page css */
 .profile-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
-    position: relative;
-    color: #333;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  color: #333;
 }
 .profile-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 .profile-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #007bff;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #007bff;
 }
 .username {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #007bff;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #007bff;
 }
 .fullname {
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 5px;
 }
 .email {
-    font-size: 16px;
-    color: #666;
-    margin-top: 5px;
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
 }
 .bio {
-    font-size: 14px;
-    font-style: italic;
-    color: #555;
-    margin-top: 5px;
+  font-size: 14px;
+  font-style: italic;
+  color: #555;
+  margin-top: 5px;
 }
 .gender {
-    font-size: 14px;
-    font-weight: bold;
-    background: #f8f9fa;
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 8px;
-    margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #f8f9fa;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 .stats {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 15px;
-    font-size: 14px;
-    font-weight: bold;
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
 }
 .stats div {
-    text-align: center;
+  text-align: center;
 }
 .stats span {
-    display: block;
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
 }
 /* show user page css end */
-
-
 
 /* Datatable css */
 
 .dataTables_wrapper {
-    overflow-x: auto; /* Allows horizontal scrolling */
-    width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling */
+  width: 100%;
 }
 
 #datatable {
-    white-space: nowrap; /* Prevents text from wrapping inside cells */
+  white-space: nowrap; /* Prevents text from wrapping inside cells */
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table thead {
-    background-color: #007bff;
-    color: white;
-    text-align: left;
+  background-color: #007bff;
+  color: white;
+  text-align: left;
 }
 
 table tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 table tbody tr:hover {
-    background-color: #cce5ff;
-    transition: 0.3s;
+  background-color: #cce5ff;
+  transition: 0.3s;
 }
 /* datatable css end */
 
 /* show post page css */
 .post-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.3s ease-in-out;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.3s ease-in-out;
 }
 
 .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Maintain 3:4 Aspect Ratio */
 .post-carousel img,
 .post-carousel video {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 8px;
+  width: 100%;
+  aspect-ratio: 3 / 4; /* Ensures 3:4 aspect ratio on all screen sizes */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Specific Fix for Larger Screens */
+@media (min-width: 992px) {
+  /* Targets laptop and larger screens */
+  .post-carousel img,
+  .post-carousel video {
+    height: auto; /* Ensures aspect ratio is respected */
+  }
 }
 
 .media-count {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
 }
-
-
 
 /* Remove default Bootstrap carousel button background */
 .carousel-control-prev,
 .carousel-control-next {
-    width: auto;
-    background: none;
-    border: none;
+  width: auto;
+  background: none;
+  border: none;
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    filter: invert(1);
+  filter: invert(1);
 }
 
 .username {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
-    margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin-top: 10px;
 }
 
 .description {
-    font-size: 14px;
-    color: #555;
-    overflow: hidden;
-    max-height: 60px;
-    transition: max-height 0.3s ease-in-out;
+  font-size: 14px;
+  color: #555;
+  overflow: hidden;
+  max-height: 60px;
+  transition: max-height 0.3s ease-in-out;
 }
 
-.see-more {
-    color: #007bff;
-    cursor: pointer;
+.post-meta {
+    display: flex;
+    justify-content: space-between; /* Pushes username to left and stats to right */
+    align-items: center;
+    margin-top: 10px;
+}
+
+.post-stats {
+    display: flex;
+    gap: 15px; /* Adds spacing between like and comment icons */
+}
+
+.post-stats span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-size: 14px;
-    display: block;
-    margin-top: 5px;
+    color: #555;
+    cursor: pointer;
+}
+
+.post-stats i{
+    color: #ff4757;
+}
+
+
+.see-more {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  display: block;
+  margin-top: 5px;
 }
 
 .see-more:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 /* show post page css */
 
-
-
 /* Manage user page css */
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 34px;
-    height: 20px;
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
 }
 
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
 }
 
-input:checked+.slider {
-    background-color: #007bff;
+input:checked + .slider {
+  background-color: #007bff;
 }
 
-input:checked+.slider:before {
-    transform: translateX(14px);
+input:checked + .slider:before {
+  transform: translateX(14px);
 }
 /* Mange user page css end */

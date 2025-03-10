@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                 ? array_map(fn($file) => "http://192.168.4.220/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
                                 : [];
                         ?>
-                            <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="col-lg-3 col-md-6 mb-4">
                                 <div class="post-card">
                                     <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
