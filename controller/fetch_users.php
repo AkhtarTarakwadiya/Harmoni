@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $profileImage = !empty($row['user_profile_photo']) ? "http://192.168.4.220/Harmoni" . $row['user_profile_photo'] : "http://192.168.4.220/Harmoni/uploads/default_profile.png";
 
             echo '<li class="list-group-item">
-                    <img src="'.htmlspecialchars($profileImage).'" alt="Profile Pic" width="40" class="rounded-circle">
+                    <img src="'.htmlspecialchars($profileImage).'" alt="Profile Pic" width="40" height="40" class="rounded-circle">
                     @'.htmlspecialchars($row['user_name']).'
                   </li>';
         }
