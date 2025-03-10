@@ -1,7 +1,9 @@
 <?php
 include 'database/db.php';
+// Check if a search query is provided
+$searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
-// Query to fetch posts, media, likes, and comments count
+// Modify the SQL query to filter by username if a search is applied
 $fetchPostsQuery = "
     SELECT 
         p.post_id, 
@@ -17,9 +19,14 @@ $fetchPostsQuery = "
     LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
     LEFT JOIN likes_master pl ON p.post_id = pl.post_id
     LEFT JOIN comments_master pc ON p.post_id = pc.post_id
-    WHERE p.post_status = 1
-    GROUP BY p.post_id 
-    ORDER BY p.created_at DESC";
+    WHERE p.post_status = 1";
+
+// If there's a search query, modify the WHERE condition
+if (!empty($searchQuery)) {
+    $fetchPostsQuery .= " AND u.user_name LIKE '%$searchQuery%'";
+}
+
+$fetchPostsQuery .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
 
 $result = mysqli_query($conn, $fetchPostsQuery);
 ?>
@@ -77,16 +84,19 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
-                    <div class="row">
+                    <!-- Search Box -->
+                    <div class="mb-3">
+                        <input type="text" id="searchBox" class="form-control" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
+                    </div>
+
+                    <div class="row" id="postContainer">
                         <?php while ($row = mysqli_fetch_assoc($result)) {
                             $post_id = (int)$row['post_id'];
-
-                            // Media file formatting - Full URL Path
                             $mediaFiles = !empty($row['media_files'])
                                 ? array_map(fn($file) => "http://192.168.4.220/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
                                 : [];
                         ?>
-                            <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-4 post-card-wrapper" data-username="<?php echo strtolower($row['user_name']); ?>">
                                 <div class="post-card">
                                     <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel" data-bs-ride="carousel">
                                         <div class="carousel-inner">
@@ -116,34 +126,21 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon"></span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon"></span>
-                                        </button>
                                     </div>
 
                                     <div class="post-meta">
                                         <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
                                         <div class="post-stats">
-                                            <span class="likes-count" data-post="<?php echo $post_id; ?>" onclick="openModal('likes', <?php echo $post_id; ?>)">
-                                                <i class="fas fa-heart"></i> <?php echo $row['like_count']; ?>
-                                            </span>
-                                            <span class="comments-count" data-post="<?php echo $post_id; ?>" onclick="openModal('comments', <?php echo $post_id; ?>)">
-                                                <i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?>
-                                            </span>
+                                            <span class="likes-count"><i class="fas fa-heart"></i> <?php echo $row['like_count']; ?></span>
+                                            <span class="comments-count"><i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?></span>
                                         </div>
                                     </div>
 
-                                    <div class="description" id="desc_<?php echo $post_id; ?>">
+                                    <div class="description">
                                         <?php echo htmlspecialchars(substr($row['post_content'], 0, 100)) . '...'; ?>
                                     </div>
-                                    <span class="see-more" onclick="toggleDescription('desc_<?php echo $post_id; ?>', this)">See More</span>
                                 </div>
                             </div>
-
-
                         <?php } ?>
                     </div>
                 </div>
@@ -223,6 +220,15 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 el.textContent = "See More";
             }
         }
+        $(document).ready(function() {
+            $("#searchBox").on("keyup", function() {
+                var searchText = $(this).val().toLowerCase();
+                $(".post-card-wrapper").each(function() {
+                    var username = $(this).data("username");
+                    $(this).toggle(username.includes(searchText));
+                });
+            });
+        });
     </script>
 
 </body>
