@@ -4,6 +4,7 @@ include './database/db.php';
 
 // Fetch user data
 $sql = "SELECT 
+            user_id,
             user_name, 
             user_full_name, 
             user_email, 
@@ -98,8 +99,12 @@ $result = mysqli_query($conn, $sql);
                                         <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
                                         <div class="stats">
                                             <div><span><?php echo $row['total_posts']; ?></span> Posts</div>
-                                            <div><span><?php echo $row['total_followers']; ?></span> Followers</div>
-                                            <div><span><?php echo $row['total_following']; ?></span> Following</div>
+                                            <div class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
+        <span><?php echo $row['total_followers']; ?></span> Followers
+    </div>
+    <div class="view-following" data-id="<?php echo $row['user_id']; ?>" data-type="following">
+        <span><?php echo $row['total_following']; ?></span> Following
+    </div>
                                         </div>
                                     </div>
                                 </div>
@@ -122,6 +127,27 @@ $result = mysqli_query($conn, $sql);
 
     </div>
     <!-- End of Page Wrapper -->
+
+    <!-- Follower/following modal start -->
+     <!-- Followers/Following Modal -->
+<div class="modal fade" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userListModalLabel">User List</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="userList" class="list-group">
+                    <!-- User list will be loaded here dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Follower/following modal end -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -181,6 +207,28 @@ $result = mysqli_query($conn, $sql);
                     }
                 });
             });
+
+            $(".view-followers, .view-following").on("click", function() {
+        let userId = $(this).data("id");
+        let type = $(this).data("type");
+        let modalTitle = type === "followers" ? "Followers List" : "Following List";
+        
+        $("#userListModalLabel").text(modalTitle);
+        
+        $.ajax({
+            url: "controller/fetch_users.php",
+            method: "POST",
+            data: { user_id: userId, type: type },
+            dataType: "html",
+            success: function(response) {
+                $("#userList").html(response);
+                $("#userListModal").modal("show"); // Show the modal
+            },
+            error: function() {
+                alert("Error fetching users!");
+            }
+        });
+    });
         });
     </script>
 
