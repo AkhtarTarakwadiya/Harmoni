@@ -175,6 +175,34 @@ table tbody tr:hover {
 .see-more:hover {
     text-decoration: underline;
 }
+
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.post-stats {
+    font-size: 14px;
+    color: #555;
+}
+
+.post-stats span {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.post-stats i {
+    color: #007bff;
+    margin-right: 4px;
+}
+
+.post-stats span:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
 /* show post page css */
 
 

@@ -29,7 +29,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-            <?php include 'common/side.php'; ?>
+        <?php include 'common/side.php'; ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -81,7 +81,13 @@
                                 </div>
 
                                 <!-- Post Content -->
-                                <div class="username">@john_doe</div>
+                                <div class="post-meta">
+                                    <div class="username">@jone_doe</div>
+                                    <div class="post-stats">
+                                        <span class="likes-count"><i class="fas fa-heart"></i> 20</span>
+                                        <span class="comments-count"><i class="fas fa-comment"></i> 15</span>
+                                    </div>
+                                </div>
                                 <div class="description" id="desc1">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam... Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore, error recusandae eaque, cumque accusamus temporibus eius atque doloribus fugit quibusdam laborum iusto, incidunt aliquam exercitationem sit voluptatem. Itaque, dolor quasi?
                                 </div>
@@ -109,9 +115,16 @@
                                     </button>
                                 </div>
 
-                                <div class="username">@jane_smith</div>
+                                <div class="post-meta">
+                                    <div class="username">@jane_smith</div>
+                                    <div class="post-stats">
+                                        <span class="likes-count"><i class="fas fa-heart"></i> 25</span>
+                                        <span class="comments-count"><i class="fas fa-comment"></i> 10</span>
+                                    </div>
+                                </div>
+
                                 <div class="description" id="desc2">
-                                    This is a sample post about a city. It contains beautiful views and stunning buildings... Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem pariatur temporibus consequuntur? Quidem, repellendus similique sequi quo aspernatur voluptates ab vel ad quos fuga dolorem, aperiam harum, provident sint obcaecati!
+                                    This is a sample post about a city. It contains beautiful views and stunning buildings... Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore, error recusandae eaque, cumque accusamus temporibus eius atque doloribus fugit quibusdam laborum iusto, incidunt aliquam exercitationem sit voluptatem. Itaque, dolor quasi?
                                 </div>
                                 <span class="see-more" onclick="toggleDescription('desc2', this)">See More</span>
                             </div>
@@ -174,8 +187,8 @@
     <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <!-- <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
