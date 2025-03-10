@@ -104,7 +104,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                                 Your browser does not support the video tag.
                                                             </video>
                                                         <?php } ?>
-                                                        <div class="media-count-no">
+                                                        <div class="media-count">
                                                             <span><?php echo ($index + 1) . "/" . $totalMedia; ?></span>
                                                         </div>
                                                     </div>
@@ -142,6 +142,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                     <span class="see-more" onclick="toggleDescription('desc_<?php echo $post_id; ?>', this)">See More</span>
                                 </div>
                             </div>
+
 
                         <?php } ?>
                     </div>
