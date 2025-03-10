@@ -70,6 +70,13 @@
     font-weight: bold;
     color: #007bff;
 }
+.profile-list-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* Ensures the image is cropped properly */
+    border-radius: 50%; /* Makes it circular */
+    border: 2px solid #ddd; /* Optional: Adds a border */
+}
 /* show user page css end */
 
 
