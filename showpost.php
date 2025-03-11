@@ -126,6 +126,12 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                 </div>
                                             <?php } ?>
                                         </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </button>
                                     </div>
 
                                     <div class="post-meta">
