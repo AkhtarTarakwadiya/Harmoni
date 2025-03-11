@@ -138,6 +138,22 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     </div>
 
 
+    <!-- Modal for Media Display -->
+    <div class="modal fade" id="mediaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Post Media</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="mediaContainer" class="media-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     </div>
 
