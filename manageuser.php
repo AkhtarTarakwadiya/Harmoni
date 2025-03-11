@@ -1,4 +1,10 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: /Harmoni/login.php');
+    exit();
+}
 include 'database/db.php';
 
 // Fetch user data from user_master table
