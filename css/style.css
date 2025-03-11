@@ -184,13 +184,11 @@ table tbody tr:hover {
 
 .post-stats {
     display: flex;
-    gap: 15px; /* Adds spacing between like and comment icons */
 }
 
 .post-stats span {
     display: flex;
     align-items: center;
-    gap: 5px;
     font-size: 14px;
     color: #555;
     cursor: pointer;

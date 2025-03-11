@@ -137,9 +137,17 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                     <div class="post-meta">
                                         <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
                                         <div class="post-stats">
-                                            <span class="likes-count"><i class="fas fa-heart"></i> <?php echo $row['like_count']; ?></span>
-                                            <span class="comments-count"><i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?></span>
+                                            <!-- Like Button -->
+                                            <button class="btn btn-sm btn-light view-likes" data-id="<?php echo $row['post_id']; ?>" data-type="likes">
+                                                <i class="fas fa-heart"></i> <?php echo $row['like_count']; ?>
+                                            </button>
+
+                                            <!-- Comment Button -->
+                                            <button class="btn btn-sm btn-light view-comments" data-id="<?php echo $row['post_id']; ?>" data-type="comments">
+                                                <i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?>
+                                            </button>
                                         </div>
+
                                     </div>
 
                                     <div class="description">
@@ -189,7 +197,24 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             </div>
         </div>
     </div>
+
+    <!-- Like & Comment Modal -->
+    <div class="modal fade" id="likeCommentModal" tabindex="-1" role="dialog" aria-labelledby="likeCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="likeCommentModalLabel">Loading...</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
     </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -212,9 +237,33 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
     <script>
-        function openModal(type, postId) {
-            alert("Show " + type + " list for Post ID: " + postId);
-        }
+        $(document).ready(function() {
+            $(".view-likes, .view-comments").on("click", function() {
+                let postId = $(this).data("id");
+                let type = $(this).data("type");
+                let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
+
+                $("#likeCommentModalLabel").text(modalTitle); // Set modal title
+
+                $.ajax({
+                    url: "controller/fetch_modal_data.php",
+                    method: "POST",
+                    data: {
+                        post_id: postId,
+                        type: type
+                    },
+                    dataType: "html",
+                    success: function(response) {
+                        $("#modalBody").html(response);
+                        $("#likeCommentModal").modal("show"); // Show modal
+                    },
+                    error: function() {
+                        alert("Error fetching data!");
+                    }
+                });
+            });
+        });
+
 
         function toggleDescription(id, el) {
             var desc = document.getElementById(id);
