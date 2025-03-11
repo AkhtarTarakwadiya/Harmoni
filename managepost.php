@@ -156,6 +156,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     <script src="js/demo/chart-pie-demo.js"></script> -->
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script>
         $(document).ready(function() {
@@ -182,21 +184,41 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 let mediaId = $(this).data("media-id");
                 let mediaPath = $(this).data("media-path");
 
-                if (confirm("Are you sure you want to delete this media?")) {
-                    $.ajax({
-                        url: "ajax/delete_media.php",
-                        type: "POST",
-                        data: {
-                            media_id: mediaId,
-                            media_path: mediaPath
-                        },
-                        success: function(response) {
-                            alert(response);
-                            $("#mediaModal").modal("hide");
-                        }
-                    });
-                }
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "ajax/delete_media.php",
+                            type: "POST",
+                            data: {
+                                media_id: mediaId,
+                                media_path: mediaPath
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: response,
+                                    icon: "success"
+                                }).then(() => {
+                                    $("#mediaModal").modal("hide"); // Close modal after deletion
+                                    location.reload(); // Refresh the page to reflect changes
+                                });
+                            },
+                            error: function() {
+                                Swal.fire("Error!", "There was an error deleting the media.", "error");
+                            }
+                        });
+                    }
+                });
             });
+
         });
     </script>
 
