@@ -260,11 +260,17 @@ input:checked + .slider:before {
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* Ensure exactly two items per row */
   gap: 10px;
+  justify-content: center;
 }
 .media-item {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  padding: 10px;
 }
 .delete-media {
   position: absolute;
@@ -275,6 +281,14 @@ input:checked + .slider:before {
   border: none;
   padding: 5px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 16px;
 }
+
+/* Responsive: One item per row on small screens */
+@media (max-width: 480px) {
+  .media-grid {
+    grid-template-columns: repeat(1, 1fr); /* One item per row in mobile view */
+  }
+}
+
 /* Mange user page css end */
