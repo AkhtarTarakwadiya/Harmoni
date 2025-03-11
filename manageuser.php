@@ -148,7 +148,7 @@ $result = mysqli_query($conn, $sql);
                 scrollX: true
             });
 
-            $('.block-toggle').on('change', function() {
+            $(document).on('change', '.block-toggle', function() {
                 let toggleButton = $(this);
                 let userId = toggleButton.data('id');
                 let isBlocked = toggleButton.prop('checked') ? 0 : 1; // Reversed logic
@@ -205,15 +205,17 @@ $result = mysqli_query($conn, $sql);
                     }
                 });
             });
-            $('.delete-user').on('click', function(e) {
+
+
+            $(document).on('click', '.delete-user', function(e) {
                 e.preventDefault();
                 let deleteButton = $(this);
                 let userId = deleteButton.data('id');
 
                 Swal.fire({
                     title: "Are You Sure?",
-                    text: "You want to Delete this user?",
-                    icon: "Warning",
+                    text: "You want to delete this user?",
+                    icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",
                     cancelButtonColor: "#3085d6",
@@ -255,6 +257,7 @@ $result = mysqli_query($conn, $sql);
                     }
                 });
             });
+
         });
     </script>
 
