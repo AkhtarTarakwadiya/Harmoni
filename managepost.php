@@ -1,3 +1,18 @@
+<?php
+include 'database/db.php';
+
+$fetchPostsQuery = "
+    SELECT 
+        p.post_id, 
+        u.user_name, 
+        p.post_content 
+    FROM posts p
+    LEFT JOIN user_master u ON p.user_id = u.user_id
+    WHERE p.post_status = 1
+    ORDER BY p.created_at DESC";
+
+$result = mysqli_query($conn, $fetchPostsQuery);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +60,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                    <?php include 'common/nav.php' ?>
+                <?php include 'common/nav.php' ?>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -59,122 +74,28 @@
                     </div>
 
                     <div class="dataTables_wrapper">
-                        <table id="datatable">
+                        <table id="datatable" class="display">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Country</th>
-                                    <th>Joined</th>
+                                    <th>Post ID</th>
+                                    <th>User Name</th>
+                                    <th>Post Content</th>
+                                    <th>Post Media</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>USA</td>
-                                    <td>2024-03-01</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@example.com</td>
-                                    <td>Canada</td>
-                                    <td>2024-02-15</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Michael Brown</td>
-                                    <td>michael@example.com</td>
-                                    <td>UK</td>
-                                    <td>2024-01-20</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Emily Davis</td>
-                                    <td>emily@example.com</td>
-                                    <td>Germany</td>
-                                    <td>2023-12-05</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>David Wilson</td>
-                                    <td>david@example.com</td>
-                                    <td>Australia</td>
-                                    <td>2023-11-25</td>
-                                </tr>
+                                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                    <tr>
+                                        <td><?php echo $row['post_id']; ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_name']); ?></td>
+                                        <td><?php echo htmlspecialchars(substr($row['post_content'], 0, 50)) . '...'; ?></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm show-media" data-post-id="<?php echo $row['post_id']; ?>">
+                                                Show Media
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -187,7 +108,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-                <?php include 'common/footer.php' ?>
+            <?php include 'common/footer.php' ?>
             <!-- End of Footer -->
 
         </div>
@@ -200,6 +121,22 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+
+    <!-- Modal for Media Display -->
+    <div class="modal fade" id="mediaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Post Media</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="mediaContainer" class="media-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -244,7 +181,43 @@
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable();
-            scrollX: true
+
+            $(".show-media").click(function() {
+                let postId = $(this).data("post-id");
+                $("#mediaContainer").html("<p>Loading...</p>");
+
+                $.ajax({
+                    url: "ajax/fetch_media.php",
+                    type: "POST",
+                    data: {
+                        post_id: postId
+                    },
+                    success: function(response) {
+                        $("#mediaContainer").html(response);
+                        $("#mediaModal").modal("show");
+                    }
+                });
+            });
+
+            $(document).on("click", ".delete-media", function() {
+                let mediaId = $(this).data("media-id");
+                let mediaPath = $(this).data("media-path");
+
+                if (confirm("Are you sure you want to delete this media?")) {
+                    $.ajax({
+                        url: "ajax/delete_media.php",
+                        type: "POST",
+                        data: {
+                            media_id: mediaId,
+                            media_path: mediaPath
+                        },
+                        success: function(response) {
+                            alert(response);
+                            $("#mediaModal").modal("hide");
+                        }
+                    });
+                }
+            });
         });
     </script>
 
