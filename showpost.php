@@ -126,12 +126,19 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon"></span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon"></span>
-                                        </button>
+                                        <?php
+                                        $totalMedia = !empty($mediaFiles) ? count($mediaFiles) : 0; // Initialize $totalMedia
+
+                                        if ($totalMedia > 1) { ?>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </button>
+                                        <?php } ?>
+
+
                                     </div>
 
                                     <div class="post-meta">
@@ -275,27 +282,27 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
         function toggleDescription(postId, el) {
-    var descContainer = document.getElementById("desc_" + postId);
-    var shortText = document.getElementById("short_" + postId);
-    var fullText = document.getElementById("full_" + postId);
-    var postCard = el.closest(".post-card"); // Get only the clicked card
+            var descContainer = document.getElementById("desc_" + postId);
+            var shortText = document.getElementById("short_" + postId);
+            var fullText = document.getElementById("full_" + postId);
+            var postCard = el.closest(".post-card"); // Get only the clicked card
 
-    if (shortText.style.display === "none") {
-        // Collapse back
-        shortText.style.display = "inline";
-        fullText.style.display = "none";
-        descContainer.classList.remove("expanded");
-        postCard.classList.remove("expanded-card");
-        el.textContent = "See More";
-    } else {
-        // Expand only this one
-        shortText.style.display = "none";
-        fullText.style.display = "inline";
-        descContainer.classList.add("expanded");
-        postCard.classList.add("expanded-card");
-        el.textContent = "See Less";
-    }
-}
+            if (shortText.style.display === "none") {
+                // Collapse back
+                shortText.style.display = "inline";
+                fullText.style.display = "none";
+                descContainer.classList.remove("expanded");
+                postCard.classList.remove("expanded-card");
+                el.textContent = "See More";
+            } else {
+                // Expand only this one
+                shortText.style.display = "none";
+                fullText.style.display = "inline";
+                descContainer.classList.add("expanded");
+                postCard.classList.add("expanded-card");
+                el.textContent = "See Less";
+            }
+        }
 
 
 
