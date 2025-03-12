@@ -126,7 +126,7 @@ $result = mysqli_query($conn, $sql);
                                             </label>
                                         </td>
                                         <td>
-                                            <a href="edit_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                            <!-- <a href="edit_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a> -->
                                             <a href="#" class="btn btn-danger btn-sm delete-user" data-id="<?php echo $row['user_id']; ?>">Delete</a>
                                         </td>
                                     </tr>
