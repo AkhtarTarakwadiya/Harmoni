@@ -1,10 +1,8 @@
 <?php
 
-session_start();
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: /Harmoni/login.php');
-    exit();
-}
+ob_start(); // Output buffering start
+// session_start();
+
 include 'database/db.php';
 
 // Fetch user data from user_master table
