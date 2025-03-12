@@ -98,12 +98,12 @@ $result = mysqli_query($conn, $sql);
                                         <div class="email">Email: <?php echo htmlspecialchars($row['user_email']); ?></div>
                                         <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
                                         <div class="stats">
-                                            <div><span><?php echo $row['total_posts']; ?></span> Posts</div>
-                                            <div class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
-                                                <span><?php echo $row['total_followers']; ?></span> Followers
+                                            <div style="cursor: pointer;"><span style="cursor: pointer;"><?php echo $row['total_posts']; ?></span> Posts</div>
+                                            <div style="cursor: pointer;" class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
+                                                <span style="cursor: pointer;"><?php echo $row['total_followers']; ?></span> Followers
                                             </div>
-                                            <div class="view-following" data-id="<?php echo $row['user_id']; ?>" data-type="following">
-                                                <span><?php echo $row['total_following']; ?></span> Following
+                                            <div style="cursor: pointer;" class="view-following" data-id="<?php echo $row['user_id']; ?>" data-type="following">
+                                                <span style="cursor: pointer;"><?php echo $row['total_following']; ?></span> Following
                                             </div>
                                         </div>
                                     </div>

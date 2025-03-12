@@ -150,9 +150,18 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
                                     </div>
 
-                                    <div class="description">
-                                        <?php echo htmlspecialchars(substr($row['post_content'], 0, 100)) . '...'; ?>
+                                    <div class="description" id="desc_<?php echo $row['post_id']; ?>">
+                                        <span id="short_<?php echo $post_id; ?>">
+                                            <?php echo htmlspecialchars(substr($row['post_content'], 0, 50)) . (strlen($row['post_content']) > 50 ? '...' : ''); ?>
+                                        </span>
+                                        <span id="full_<?php echo $post_id; ?>" style="display: none;">
+                                            <?php echo htmlspecialchars($row['post_content']); ?>
+                                        </span>
+                                        <?php if (strlen($row['post_content']) > 50) { ?>
+                                            <span class="see-more" onclick="toggleDescription(<?php echo $post_id; ?>, this)">See More</span>
+                                        <?php } ?>
                                     </div>
+
                                 </div>
                             </div>
                         <?php } ?>
@@ -265,16 +274,32 @@ $result = mysqli_query($conn, $fetchPostsQuery);
         });
 
 
-        function toggleDescription(id, el) {
-            var desc = document.getElementById(id);
-            if (desc.style.maxHeight === "60px") {
-                desc.style.maxHeight = "none";
-                el.textContent = "See Less";
-            } else {
-                desc.style.maxHeight = "60px";
-                el.textContent = "See More";
-            }
-        }
+        function toggleDescription(postId, el) {
+    var descContainer = document.getElementById("desc_" + postId);
+    var shortText = document.getElementById("short_" + postId);
+    var fullText = document.getElementById("full_" + postId);
+    var postCard = el.closest(".post-card"); // Get only the clicked card
+
+    if (shortText.style.display === "none") {
+        // Collapse back
+        shortText.style.display = "inline";
+        fullText.style.display = "none";
+        descContainer.classList.remove("expanded");
+        postCard.classList.remove("expanded-card");
+        el.textContent = "See More";
+    } else {
+        // Expand only this one
+        shortText.style.display = "none";
+        fullText.style.display = "inline";
+        descContainer.classList.add("expanded");
+        postCard.classList.add("expanded-card");
+        el.textContent = "See Less";
+    }
+}
+
+
+
+
         $(document).ready(function() {
             $("#searchBox").on("keyup", function() {
                 var searchText = $(this).val().toLowerCase();

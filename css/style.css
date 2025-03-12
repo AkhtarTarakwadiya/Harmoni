@@ -104,38 +104,60 @@ table tbody tr:hover {
 }
 /* datatable css end */
 
-/* show post page css */
+
+/* Ensure uniform card size and dynamic height */
 .post-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 15px;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto; /* Allow cards to expand naturally */
+  min-height: 350px; /* Keeps all cards uniform in size */
 }
 
+/* Ensure all cards remain equal in size */
+.post-card.expanded {
+  min-height: auto;
+}
+
+.post-card.expanded-card {
+  min-height: auto; /* Only this card will expand */
+}
+
+/* Prevent flexbox from squishing small description cards */
+.post-card .description {
+  flex-grow: 1;
+  min-height: 50px;
+}
+
+/* Hover effect */
 .post-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Maintain 3:4 Aspect Ratio */
+/* Image & Video - Maintain 3:4 aspect ratio */
 .post-carousel img,
 .post-carousel video {
   width: 100%;
-  aspect-ratio: 3 / 4; /* Ensures 3:4 aspect ratio on all screen sizes */
+  aspect-ratio: 3 / 4; /* Ensures a fixed ratio for all images/videos */
   object-fit: cover;
   border-radius: 8px;
 }
 
-/* Specific Fix for Larger Screens */
+/* Ensure proper aspect ratio for larger screens */
 @media (min-width: 992px) {
-  /* Targets laptop and larger screens */
   .post-carousel img,
   .post-carousel video {
-    height: auto; /* Ensures aspect ratio is respected */
+      height: auto;
   }
 }
 
+/* Media count display */
 .media-count {
   position: absolute;
   bottom: 10px;
@@ -160,6 +182,7 @@ table tbody tr:hover {
   filter: invert(1);
 }
 
+/* Username styling */
 .username {
   font-size: 18px;
   font-weight: bold;
@@ -167,51 +190,60 @@ table tbody tr:hover {
   margin-top: 10px;
 }
 
+/* Post meta section - username and post stats */
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Post stats (likes/comments) */
+.post-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.post-stats span {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+.post-stats i {
+  color: #ff4757;
+}
+
+/* Description styling */
+/* Description styling */
 .description {
   font-size: 14px;
   color: #555;
   overflow: hidden;
-  max-height: 60px;
+  max-height: 50px;
   transition: max-height 0.3s ease-in-out;
+  position: relative;
 }
 
-.post-meta {
-    display: flex;
-    justify-content: space-between; /* Pushes username to left and stats to right */
-    align-items: center;
-    margin-top: 10px;
+/* Expand only this description */
+.description.expanded {
+  max-height: none;
 }
 
-.post-stats {
-    display: flex;
-}
-
-.post-stats span {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #555;
-    cursor: pointer;
-}
-
-.post-stats i{
-    color: #ff4757;
-}
-
-
+/* See More button */
 .see-more {
   color: #007bff;
   cursor: pointer;
   font-size: 14px;
-  display: block;
+  display: inline-block;
   margin-top: 5px;
 }
 
 .see-more:hover {
   text-decoration: underline;
 }
-/* show post page css */
-
 /* Manage user page css */
 .switch {
   position: relative;

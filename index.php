@@ -1,3 +1,9 @@
+<?php
+ob_start(); // Output buffering start
+// session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,7 +35,7 @@
     <div id="wrapper">
 
         <!-- Sidebar Code -->
-        <?php include 'common/side.php'; ?>
+        <?php include 'common/side.php';?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
