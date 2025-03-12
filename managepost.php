@@ -81,6 +81,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                     <th>User Name</th>
                                     <th>Post Content</th>
                                     <th>Post Media</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,6 +95,10 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                 Show Media
                                             </button>
                                         </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm delete-post" data-post-id="<?php echo $row['post_id']; ?>">Delete</button>
+                                        </td>
+
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -163,7 +168,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
         $(document).ready(function() {
             $('#datatable').DataTable();
 
-            $(".show-media").click(function() {
+            $(document).on("click", ".show-media", function() {
                 let postId = $(this).data("post-id");
                 $("#mediaContainer").html("<p>Loading...</p>");
 
@@ -218,6 +223,44 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     }
                 });
             });
+
+
+            $(document).on("click", ".delete-post", function() {
+                let postId = $(this).data("post-id");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This post will be marked as deleted and its media files will be removed.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "ajax/delete_posts.php",
+                            type: "POST",
+                            data: {
+                                post_id: postId
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: response,
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload(); // Refresh page to reflect changes
+                                });
+                            },
+                            error: function() {
+                                Swal.fire("Error!", "Failed to delete the post.", "error");
+                            }
+                        });
+                    }
+                });
+            });
+
 
         });
     </script>
