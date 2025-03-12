@@ -87,7 +87,7 @@ $result = mysqli_query($conn, $sql);
                                 // Set profile image URL
                                 $profileImage = !empty($row['user_profile_photo']) ?
                                     "http://192.168.4.220/Harmoni" . $row['user_profile_photo'] :
-                                    "http://192.168.4.220/Harmoni/uploads/default_profile.png";
+                                    "http://192.168.4.220/Harmoni/uploads/profile2.jpeg";
                             ?>
                                 <div class="col-lg-4 col-md-6 mb-4">
                                     <div class="profile-card">
