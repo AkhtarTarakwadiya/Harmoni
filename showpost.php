@@ -121,7 +121,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                                 <?php }
                                             } else { ?>
                                                 <div class="carousel-item active">
-                                                    <img src="http://192.168.4.220/Harmoni/uploads/default.jpg" alt="No Image Available">
+                                                    <img src="http://192.168.4.220/Harmoni/img/default-post-1.jpeg" alt="No Image Available">
                                                     <div class="media-count"><span>1/1</span></div>
                                                 </div>
                                             <?php } ?>
