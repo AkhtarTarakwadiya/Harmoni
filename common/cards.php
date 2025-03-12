@@ -20,10 +20,11 @@ $post = mysqli_fetch_assoc($result);
 $total_posts = $post['total'];
 
 // Recent Posts
-$recent_postsql = "SELECT post_content FROM posts WHERE post_status = 1 ORDER BY post_id DESC LIMIT 1";
+// $recent_postsql = "SELECT post_content FROM posts WHERE post_status = 1 ORDER BY post_id DESC LIMIT 1";
+$recent_postsql = "SELECT user_name FROM user_master LEFT JOIN posts ON user_master.user_id = posts.user_id WHERE user_status = 1 ORDER BY post_id DESC LIMIT 1";
 $result = mysqli_query($conn, $recent_postsql);
 $post = mysqli_fetch_assoc($result);
-$recent_post = $post['post_content'];
+$recent_post = $post['user_name'];
 
 $conn->close();
 ?> 
@@ -93,7 +94,7 @@ $conn->close();
              <div class="row no-gutters align-items-center">
                  <div class="col mr-2">
                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                         Recent Posts</div>
+                         Recent Post By</div>
                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $recent_post ?></div>
                  </div>
                  <div class="col-auto">
