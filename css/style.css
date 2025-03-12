@@ -222,7 +222,7 @@ table tbody tr:hover {
   font-size: 14px;
   color: #555;
   overflow: hidden;
-  max-height: 70px;
+  max-height: 50px;
   transition: max-height 0.3s ease-in-out;
   position: relative;
 }
