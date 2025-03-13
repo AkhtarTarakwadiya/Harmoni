@@ -6,7 +6,7 @@ ob_start(); // Output buffering start
 include 'database/db.php';
 
 // Fetch user data from user_master table
-$sql = "SELECT * FROM user_master WHERE user_status = 1";
+$sql = "SELECT * FROM user_master";
 $result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
@@ -96,6 +96,7 @@ $result = mysqli_query($conn, $sql);
                                     <th>Bio</th>
                                     <th>Block</th>
                                     <th>Actions</th>
+                                    <th>Remark</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,16 +118,30 @@ $result = mysqli_query($conn, $sql);
                                         <td><?php echo htmlspecialchars($row['gender']); ?></td>
                                         <td><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></td>
                                         <td>
-                                            <label class="switch">
-                                                <input type="checkbox" class="block-toggle" data-id="<?php echo $row['user_id']; ?>" <?php echo ($row['user_isblock'] == 0) ? 'checked' : ''; ?>>
+                                            <i class="fas <?php echo ($row['user_isblock'] == 0) ? 'fa-lock' : 'fa-unlock'; ?> status-icon toggle-block"
+                                                data-id="<?php echo $row['user_id']; ?>"
+                                                data-status="<?php echo $row['user_isblock']; ?>"
+                                                style="color: <?php echo ($row['user_isblock'] == 0) ? 'red' : 'green'; ?>; font-size: 18px; cursor: pointer;"></i>
+                                        </td>
 
-                                                <span class="slider round"></span>
-                                            </label>
+
+                                        <td>
+                                            <?php
+                                            $actionText = ($row['user_status'] == 1) ? "Deactivate" : "Activate";
+                                            $btnClass = ($row['user_status'] == 1) ? "btn-warning" : "btn-success";
+                                            ?>
+                                            <a href="#" class="btn <?php echo $btnClass; ?> btn-sm toggle-status" data-id="<?php echo $row['user_id']; ?>" data-status="<?php echo $row['user_status']; ?>">
+                                                <?php echo $actionText; ?>
+                                            </a>
                                         </td>
                                         <td>
-                                            <!-- <a href="edit_user.php?id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a> -->
-                                            <a href="#" class="btn btn-danger btn-sm delete-user" data-id="<?php echo $row['user_id']; ?>">Delete</a>
+                                            <?php
+                                            $status = ($row['user_status'] == 1) ? "ACTIVE" : "INACTIVE";
+                                            $blockStatus = ($row['user_isblock'] == 0) ? "BLOCKED" : "UNBLOCKED";
+                                            echo htmlspecialchars("$status | $blockStatus");
+                                            ?>
                                         </td>
+
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -152,11 +167,10 @@ $result = mysqli_query($conn, $sql);
                 scrollX: true
             });
 
-            $(document).on('change', '.block-toggle', function() {
-                let toggleButton = $(this);
-                let userId = toggleButton.data('id');
-                let isBlocked = toggleButton.prop('checked') ? 0 : 1; // Reversed logic
-
+            $(document).on('click', '.toggle-block', function() {
+                let icon = $(this);
+                let userId = icon.data('id');
+                let isBlocked = icon.data('status') == 1 ? 0 : 1; // Toggle status
                 let actionText = isBlocked ? "unblock" : "block";
 
                 Swal.fire({
@@ -169,7 +183,6 @@ $result = mysqli_query($conn, $sql);
                     confirmButtonText: `Yes, ${actionText} it!`
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Proceed with AJAX request
                         $.ajax({
                             url: 'ajax/update_block_status.php',
                             method: 'POST',
@@ -186,13 +199,20 @@ $result = mysqli_query($conn, $sql);
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Error",
-                                        text: response.message
-                                    });
-                                    toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
+
+                                    // **Update the icon, color, and data-status attribute**
+                                    if (isBlocked) {
+                                        icon.removeClass('fa-unlock').addClass('fa-lock').css('color', 'red');
+                                    } else {
+                                        icon.removeClass('fa-lock').addClass('fa-unlock').css('color', 'green');
+                                    }
+                                    icon.data('status', isBlocked);
+
+                                    // **Update the "Remark" column dynamically**
+                                    let statusCell = icon.closest('tr').find('td:last');
+                                    let currentStatus = icon.closest('tr').find('.toggle-status').data('status') == 1 ? "ACTIVE" : "INACTIVE";
+                                    let blockStatus = isBlocked ? "BLOCKED" : "UNBLOCKED";
+                                    statusCell.text(`${currentStatus} | ${blockStatus}`);
                                 }
                             },
                             error: function() {
@@ -201,53 +221,59 @@ $result = mysqli_query($conn, $sql);
                                     title: "Error",
                                     text: "Something went wrong. Try again!"
                                 });
-                                toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle on error
                             }
                         });
-                    } else {
-                        toggleButton.prop('checked', !toggleButton.prop('checked')); // Revert toggle if canceled
                     }
                 });
             });
 
 
-            $(document).on('click', '.delete-user', function(e) {
+
+            $(document).on('click', '.toggle-status', function(e) {
                 e.preventDefault();
-                let deleteButton = $(this);
-                let userId = deleteButton.data('id');
+                let button = $(this);
+                let userId = button.data('id');
+                let currentStatus = button.data('status');
+                let newStatus = currentStatus == 1 ? 0 : 1;
+                let actionText = newStatus == 1 ? "activate" : "deactivate";
 
                 Swal.fire({
-                    title: "Are You Sure?",
-                    text: "You want to delete this user?",
+                    title: "Are you sure?",
+                    text: `You want to ${actionText} this user?`,
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: `Yes, ${actionText} it!`
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
                             url: 'ajax/delete_users.php',
                             method: 'POST',
                             data: {
-                                user_id: userId
+                                user_id: userId,
+                                user_status: newStatus
                             },
                             dataType: 'json',
                             success: function(response) {
                                 if (response.status === "success") {
                                     Swal.fire({
                                         icon: "success",
-                                        title: "User Deleted Successfully!",
+                                        title: `User has been ${actionText}d`,
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
-                                    setTimeout(() => location.reload(), 1500);
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Error",
-                                        text: response.message
-                                    });
+
+                                    // **Toggle button text and class dynamically**
+                                    button.text(newStatus == 1 ? "Deactivate" : "Activate");
+                                    button.toggleClass("btn-warning btn-success");
+                                    button.data("status", newStatus);
+
+                                    // **Update the status text in the table dynamically**
+                                    let statusCell = button.closest('tr').find('td:last');
+                                    let blockStatus = button.closest('tr').find('.toggle-block').data('status') == 1 ? "BLOCKED" : "UNBLOCKED";
+                                    let userStatus = newStatus == 1 ? "ACTIVE" : "INACTIVE";
+                                    statusCell.text(`${userStatus} | ${blockStatus}`);
                                 }
                             },
                             error: function() {
@@ -261,7 +287,6 @@ $result = mysqli_query($conn, $sql);
                     }
                 });
             });
-
         });
     </script>
 
