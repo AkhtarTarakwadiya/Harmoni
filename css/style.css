@@ -70,6 +70,60 @@
   font-weight: bold;
   color: #007bff;
 }
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between elements */
+  flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.search input {
+  flex: 1; /* Allows input to take available space */
+  min-width: 200px; /* Prevents input from shrinking too much */
+  border: 2px solid #007bff; /* Blue border */
+}
+
+.search select {
+  width: 200px; /* Default width */
+  min-width: 150px;
+  padding: 8px 12px;
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Focus effect */
+.search select:focus {
+  border-color: #0056b3;
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* Hover effect */
+.search select:hover {
+  background-color: #e9ecef;
+}
+
+/* Dropdown option styling */
+.search select option {
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 576px) { 
+  .search select {
+      width: 100%; /* Smaller width on mobile */
+      font-size: 14px; /* Reduce font size */
+      padding: 6px 10px; /* Adjust padding */
+  }
+} 
+
+
 /* show user page css end */
 
 /* Datatable css */
