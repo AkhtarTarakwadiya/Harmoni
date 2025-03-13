@@ -77,9 +77,15 @@ $result = mysqli_query($conn, $sql);
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
-                    <div class="search">
-                        <input type="text" id="searchUser" class="form-control mb-4" placeholder="Search by name or username...">
+                    <div class="search d-flex align-items-center gap-2 mb-3">
+                        <input type="text" id="searchUser" class="form-control" placeholder="Search by name or username...">
+                        <select name="filter" id="filter" class="form-select">
+                            <option value="active" selected>Active Users</option>
+                            <option value="deactive">Deactive Users</option>
+                            <option value="block">Blocked Users</option>
+                        </select>
                     </div>
+
 
                     <div id="userResults">
                         <div class="row">
@@ -212,6 +218,27 @@ $result = mysqli_query($conn, $sql);
                     }
                 });
             });
+
+            $(document).ready(function() {
+                $("#filter").on("change", function() {
+                    let filterValue = $(this).val();
+
+                    $.ajax({
+                        url: "ajax//fetch_users.php",
+                        method: "GET",
+                        data: {
+                            filter: filterValue
+                        },
+                        success: function(response) {
+                            $("#userResults").html(response);
+                        },
+                        error: function() {
+                            alert("Error fetching users!");
+                        }
+                    });
+                });
+            });
+
         });
     </script>
 
