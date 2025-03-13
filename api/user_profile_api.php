@@ -93,8 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "comments" => $comments
                     ];
                 }
-            } else {
-                $posts = ["message" => "No posts found."];
             }
 
             // Final Response
