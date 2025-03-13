@@ -8,18 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_isblock = isset($_POST['user_isblock']) ? intval($_POST['user_isblock']) : 0;
 
     if ($user_id > 0) {
-        $sql = "UPDATE user_master SET user_isblock = ? WHERE user_id = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $user_isblock, $user_id);
-        $result = mysqli_stmt_execute($stmt);
+        // Directly execute the query
+        $sql = "UPDATE user_master SET user_isblock = $user_isblock WHERE user_id = $user_id";
+        $result = mysqli_query($conn, $sql);
 
         if ($result) {
             echo json_encode(["status" => "success", "message" => "User block status updated successfully"]);
         } else {
             echo json_encode(["status" => "error", "message" => mysqli_error($conn)]); // Send actual error message
         }
-
-        mysqli_stmt_close($stmt);
     } else {
         echo json_encode(["status" => "error", "message" => "Invalid user ID"]);
     }
