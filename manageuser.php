@@ -170,8 +170,9 @@ $result = mysqli_query($conn, $sql);
             $(document).on('click', '.toggle-block', function() {
                 let icon = $(this);
                 let userId = icon.data('id');
-                let isBlocked = icon.data('status') == 1 ? 0 : 1; // Toggle status
-                let actionText = isBlocked ? "unblock" : "block";
+                let currentStatus = parseInt(icon.data('status')); // Get current status as an integer
+                let newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 (unblocked) and 0 (blocked)
+                let actionText = newStatus === 1 ? "unblock" : "block";
 
                 Swal.fire({
                     title: `Are you sure?`,
@@ -188,7 +189,7 @@ $result = mysqli_query($conn, $sql);
                             method: 'POST',
                             data: {
                                 user_id: userId,
-                                user_isblock: isBlocked
+                                user_isblock: newStatus
                             },
                             dataType: 'json',
                             success: function(response) {
@@ -200,19 +201,18 @@ $result = mysqli_query($conn, $sql);
                                         timer: 1500
                                     });
 
-                                    // **Update the icon, color, and data-status attribute**
-                                    if (isBlocked) {
-                                        icon.removeClass('fa-unlock').addClass('fa-lock').css('color', 'red');
-                                    } else {
-                                        icon.removeClass('fa-lock').addClass('fa-unlock').css('color', 'green');
-                                    }
-                                    icon.data('status', isBlocked);
+                                   
+                                    icon
+                                        .removeClass(newStatus === 1 ? 'fa-lock' : 'fa-unlock')
+                                        .addClass(newStatus === 1 ? 'fa-unlock' : 'fa-lock')
+                                        .css('color', newStatus === 1 ? 'green' : 'red')
+                                        .data('status', newStatus); // **Update data-status correctly**
 
-                                    // **Update the "Remark" column dynamically**
+                                   
                                     let statusCell = icon.closest('tr').find('td:last');
-                                    let currentStatus = icon.closest('tr').find('.toggle-status').data('status') == 1 ? "ACTIVE" : "INACTIVE";
-                                    let blockStatus = isBlocked ? "BLOCKED" : "UNBLOCKED";
-                                    statusCell.text(`${currentStatus} | ${blockStatus}`);
+                                    let currentUserStatus = icon.closest('tr').find('.toggle-status').data('status') == 1 ? "ACTIVE" : "INACTIVE";
+                                    let blockStatus = newStatus === 1 ? "UNBLOCKED" : "BLOCKED";
+                                    statusCell.text(`${currentUserStatus} | ${blockStatus}`);
                                 }
                             },
                             error: function() {
