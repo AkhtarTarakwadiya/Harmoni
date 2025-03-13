@@ -19,6 +19,21 @@ $sql = "SELECT
 
 $result = mysqli_query($conn, $sql);
 
+// Fetch counts for each user type
+$activeCountQuery = "SELECT COUNT(*) AS active_count FROM user_master WHERE user_status = 1 AND user_isblock = 1";
+$blockCountQuery = "SELECT COUNT(*) AS block_count FROM user_master WHERE user_isblock = 0";
+$deactiveCountQuery = "SELECT COUNT(*) AS deactive_count FROM user_master WHERE user_status = 0";
+
+// Execute queries
+$activeResult = mysqli_query($conn, $activeCountQuery);
+$blockResult = mysqli_query($conn, $blockCountQuery);
+$deactiveResult = mysqli_query($conn, $deactiveCountQuery);
+
+// Fetch counts
+$activeCount = mysqli_fetch_assoc($activeResult)['active_count'];
+$blockCount = mysqli_fetch_assoc($blockResult)['block_count'];
+$deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,14 +92,18 @@ $result = mysqli_query($conn, $sql);
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
-                    <div class="search d-flex align-items-center gap-2 mb-3">
+                    <div class="search d-flex align-items-center gap-3 mb-3">
                         <input type="text" id="searchUser" class="form-control" placeholder="Search by name or username...">
-                        <select name="filter" id="filter" class="form-select">
-                            <option value="active" selected>Active Users</option>
-                            <option value="deactive">Deactive Users</option>
-                            <option value="block">Blocked Users</option>
-                        </select>
+
+                        <div class="d-flex align-items-center">
+                            <select name="filter" id="filter" class="form-select">
+                                <option value="active" selected>Active Users (<?php echo $activeCount; ?>)</option>
+                                <option value="deactive">Deactive Users (<?php echo $deactiveCount; ?>)</option>
+                                <option value="block">Blocked Users (<?php echo $blockCount; ?>)</option>
+                            </select>
+                        </div>
                     </div>
+
 
 
                     <div id="userResults">
