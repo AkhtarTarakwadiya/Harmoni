@@ -3,32 +3,34 @@ include 'database/db.php';
 // Check if a search query is provided
 $searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
-// Modify the SQL query to filter by username if a search is applied
+// Base query
 $fetchPostsQuery = "
-    SELECT 
-        p.post_id, 
-        p.user_id, 
-        u.user_name, 
-        p.post_content, 
-        p.created_at, 
-        GROUP_CONCAT(DISTINCT pm.media) AS media_files,
-        COUNT(DISTINCT pl.id) AS like_count,
-        COUNT(DISTINCT pc.comment_id) AS comment_count
-    FROM posts p
-    LEFT JOIN user_master u ON p.user_id = u.user_id
-    LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
-    LEFT JOIN likes_master pl ON p.post_id = pl.post_id
-    LEFT JOIN comments_master pc ON p.post_id = pc.post_id
-    WHERE p.post_status = 1";
+   SELECT 
+    p.post_id, 
+    p.user_id, 
+    u.user_name, 
+    p.post_content, 
+    p.created_at, 
+    GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ', ') AS media_files,
+    COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
+    COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count  
+FROM posts p
+LEFT JOIN user_master u ON p.user_id = u.user_id
+LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
+LEFT JOIN likes_master pl ON p.post_id = pl.post_id
+LEFT JOIN comments_master pc ON p.post_id = pc.post_id
+WHERE p.post_status = 1";
 
-// If there's a search query, modify the WHERE condition
+// Append search condition if needed
 if (!empty($searchQuery)) {
     $fetchPostsQuery .= " AND u.user_name LIKE '%$searchQuery%'";
 }
 
+// Add GROUP BY and ORDER BY at the end correctly
 $fetchPostsQuery .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
 
 $result = mysqli_query($conn, $fetchPostsQuery);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -250,6 +252,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     <script src="js/demo/chart-pie-demo.js"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
     <script>
@@ -304,6 +308,42 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             }
         }
 
+        $(document).on("click", ".delete-comment", function(e) {
+            e.preventDefault();
+
+            var commentId = $(this).data("id");
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you really want to delete this comment?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "ajax/delete_comment.php", // Ensure this matches your actual PHP script
+                        type: "POST",
+                        data: {
+                            id: commentId
+                        },
+                        success: function(response) {
+                            if (response.trim() === "success") {
+                                $("#comment-" + commentId).fadeOut();
+                                Swal.fire("Deleted!", "The comment has been deleted.", "success");
+                            } else {
+                                Swal.fire("Error!", "Something went wrong.", "error");
+                            }
+                        },
+                        error: function() {
+                            Swal.fire("Error!", "Could not reach the server.", "error");
+                        }
+                    });
+                }
+            });
+        });
 
 
 
