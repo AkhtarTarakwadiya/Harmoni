@@ -137,7 +137,7 @@ $result = mysqli_query($conn, $sql);
                                         <td>
                                             <?php
                                             $status = ($row['user_status'] == 1) ? "ACTIVE" : "INACTIVE";
-                                            $blockStatus = ($row['user_isblock'] == 0) ? "BLOCKED" : "UNBLOCKED";
+                                            $blockStatus = ($row['user_isblock'] == 1) ? "UNBLOCKED" : "BLOCKED";
                                             echo htmlspecialchars("$status | $blockStatus");
                                             ?>
                                         </td>
@@ -166,129 +166,9 @@ $result = mysqli_query($conn, $sql);
             $('#datatable').DataTable({
                 scrollX: true
             });
-
-            $(document).on('click', '.toggle-block', function() {
-                let icon = $(this);
-                let userId = icon.data('id');
-                let isBlocked = icon.data('status') == 1 ? 0 : 1; // Toggle status
-                let actionText = isBlocked ? "unblock" : "block";
-
-                Swal.fire({
-                    title: `Are you sure?`,
-                    text: `You want to ${actionText} this user?`,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: `Yes, ${actionText} it!`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'ajax/update_block_status.php',
-                            method: 'POST',
-                            data: {
-                                user_id: userId,
-                                user_isblock: isBlocked
-                            },
-                            dataType: 'json',
-                            success: function(response) {
-                                if (response.status === "success") {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: `User has been ${actionText}ed`,
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-
-                                    // **Update the icon, color, and data-status attribute**
-                                    if (isBlocked) {
-                                        icon.removeClass('fa-unlock').addClass('fa-lock').css('color', 'red');
-                                    } else {
-                                        icon.removeClass('fa-lock').addClass('fa-unlock').css('color', 'green');
-                                    }
-                                    icon.data('status', isBlocked);
-
-                                    // **Update the "Remark" column dynamically**
-                                    let statusCell = icon.closest('tr').find('td:last');
-                                    let currentStatus = icon.closest('tr').find('.toggle-status').data('status') == 1 ? "ACTIVE" : "INACTIVE";
-                                    let blockStatus = isBlocked ? "BLOCKED" : "UNBLOCKED";
-                                    statusCell.text(`${currentStatus} | ${blockStatus}`);
-                                }
-                            },
-                            error: function() {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Error",
-                                    text: "Something went wrong. Try again!"
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-
-
-
-            $(document).on('click', '.toggle-status', function(e) {
-                e.preventDefault();
-                let button = $(this);
-                let userId = button.data('id');
-                let currentStatus = button.data('status');
-                let newStatus = currentStatus == 1 ? 0 : 1;
-                let actionText = newStatus == 1 ? "activate" : "deactivate";
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: `You want to ${actionText} this user?`,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: `Yes, ${actionText} it!`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'ajax/delete_users.php',
-                            method: 'POST',
-                            data: {
-                                user_id: userId,
-                                user_status: newStatus
-                            },
-                            dataType: 'json',
-                            success: function(response) {
-                                if (response.status === "success") {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: `User has been ${actionText}d`,
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-
-                                    // **Toggle button text and class dynamically**
-                                    button.text(newStatus == 1 ? "Deactivate" : "Activate");
-                                    button.toggleClass("btn-danger btn-success");
-                                    button.data("status", newStatus);
-
-                                    // **Update the status text in the table dynamically**
-                                    let statusCell = button.closest('tr').find('td:last');
-                                    let blockStatus = button.closest('tr').find('.toggle-block').data('status') == 1 ? "BLOCKED" : "UNBLOCKED";
-                                    let userStatus = newStatus == 1 ? "ACTIVE" : "INACTIVE";
-                                    statusCell.text(`${userStatus} | ${blockStatus}`);
-                                }
-                            },
-                            error: function() {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Error",
-                                    text: "Something went wrong. Try again!"
-                                });
-                            }
-                        });
-                    }
-                });
-            });
         });
     </script>
+    <script src="js/script.js"></script>
 
 
 </body>

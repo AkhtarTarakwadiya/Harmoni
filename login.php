@@ -50,42 +50,7 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            $("#loginForm").submit(function (event) {
-                event.preventDefault();
-
-                var email = $("#email").val();
-                var password = $("#password").val();
-
-                $.ajax({
-                    url: "controller/admin_login.php",
-                    type: "POST",
-                    data: { email: email, password: password },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.status === "success") {
-                            Swal.fire({
-                                title: 'Login Successful!',
-                                text: 'You are being redirected...',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                window.location.href = './index.php';
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Login Failed!',
-                                text: response.message,
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="js/script.js"></script>
 
     <!-- Bootstrap & Core scripts -->
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
