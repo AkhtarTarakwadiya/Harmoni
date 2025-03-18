@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -79,7 +80,71 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $mail->isHTML(true);
             $mail->Subject = 'Your OTP Code';
-            $mail->Body = "Your OTP code is <strong>$otp</strong>. It is valid for 10 minutes.";
+            $mail->Body = '
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .otp-box {
+            background-color: #007bff;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+        .footer {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="../img/logo-removebg-preview.png" alt="Harmony Logo" class="logo">
+        <h2>OTP Verification</h2>
+        <p>Your One-Time Password (OTP) for verification is:</p>
+        <div class="otp-box">' . $otp . '</div>
+        <p>This OTP is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+        <p>If you did not request this, please ignore this email.</p>
+        <div class="footer">
+            &copy; ' . date("Y") . ' Your Company. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>';
+
 
             $mail->send();
 
@@ -107,4 +172,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 echo json_encode($response);
-?>
