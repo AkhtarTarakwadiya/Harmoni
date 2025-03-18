@@ -104,7 +104,7 @@ ob_start(); // Output buffering start
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Engagement Overview</h6>
                                     <div class="dropdown no-arrow">
                                         <!-- <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -127,13 +127,13 @@ ob_start(); // Output buffering start
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
+                                            <i class="fas fa-circle text-primary"></i> Likes
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
+                                            <i class="fas fa-circle text-success"></i> Comments
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
+                                            <i class="fas fa-circle text-danger"></i> Saves
                                         </span>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@ ob_start(); // Output buffering start
 
         <!-- Page level custom scripts -->
         <script src="js/demo/chart-area-demo.js"></script>
-        <!-- <script src="js/demo/chart-pie-demo.js"></script> -->
+        <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 
