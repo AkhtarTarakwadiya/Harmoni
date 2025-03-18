@@ -123,7 +123,9 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                                         <div class="email">Email: <?php echo htmlspecialchars($row['user_email']); ?></div>
                                         <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
                                         <div class="stats">
-                                            <div style="cursor: pointer;"><span style="cursor: pointer;"><?php echo $row['total_posts']; ?></span> Posts</div>
+                                            <div class="view-posts" style="cursor: pointer;" data-id="<?php echo $row['user_id']; ?>">
+                                                <span><?php echo $row['total_posts']; ?></span> Posts
+                                            </div>
                                             <div style="cursor: pointer;" class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
                                                 <span style="cursor: pointer;"><?php echo $row['total_followers']; ?></span> Followers
                                             </div>
@@ -173,6 +175,25 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
         </div>
     </div>
     <!-- Follower/following modal end -->
+
+    <!-- User Posts Modal -->
+    <div class="modal fade" id="userPostsModal" tabindex="-1" aria-labelledby="userPostsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userPostsModalLabel">User Posts</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="userPostsGrid">
+                        <!-- Posts will be loaded here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -258,6 +279,27 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                 });
             });
 
+        });
+        $(document).ready(function() {
+            $(".view-posts").on("click", function() {
+                let userId = $(this).data("id");
+
+                $.ajax({
+                    url: "controller/fetch_user_posts.php", // PHP file to fetch user posts
+                    method: "POST",
+                    data: {
+                        user_id: userId
+                    },
+                    dataType: "html",
+                    success: function(response) {
+                        $("#userPostsGrid").html(response);
+                        $("#userPostsModal").modal("show"); // Show modal
+                    },
+                    error: function() {
+                        alert("Error fetching posts!");
+                    }
+                });
+            });
         });
     </script>
 
