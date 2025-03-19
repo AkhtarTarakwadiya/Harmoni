@@ -1,5 +1,36 @@
 <?php
 include 'database/db.php';
+
+// Count all posts
+$allCountQuery = "SELECT COUNT(*) AS total FROM posts WHERE post_status = 1";
+$allCountResult = mysqli_query($conn, $allCountQuery);
+$allCount = mysqli_fetch_assoc($allCountResult)['total'];
+
+// Count yesterday's posts
+$yesterdayQuery = "SELECT COUNT(*) AS total FROM posts WHERE DATE(created_at) = DATE(NOW() - INTERVAL 1 DAY) AND post_status = 1";
+$yesterdayResult = mysqli_query($conn, $yesterdayQuery);
+$yesterdayCount = mysqli_fetch_assoc($yesterdayResult)['total'];
+
+// Count last week's posts
+$lastWeekQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 WEEK AND post_status = 1";
+$lastWeekResult = mysqli_query($conn, $lastWeekQuery);
+$lastWeekCount = mysqli_fetch_assoc($lastWeekResult)['total'];
+
+// Count last month's posts
+$lastMonthQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 MONTH AND post_status = 1";
+$lastMonthResult = mysqli_query($conn, $lastMonthQuery);
+$lastMonthCount = mysqli_fetch_assoc($lastMonthResult)['total'];
+
+// Count Most Liked Posts
+$mostLikedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM likes_master WHERE status = 1";
+$mostLikedResult = mysqli_query($conn, $mostLikedQuery);
+$mostLikedCount = mysqli_fetch_assoc($mostLikedResult)['total'];
+
+// Count Most Commented Posts
+$mostCommentedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM comments_master WHERE comment_status = 1";
+$mostCommentedResult = mysqli_query($conn, $mostCommentedQuery);
+$mostCommentedCount = mysqli_fetch_assoc($mostCommentedResult)['total'];
+
 // Check if a search query is provided
 $searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
@@ -87,9 +118,28 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     </div>
 
                     <!-- Search Box -->
-                    <div class="mb-3">
-                        <input type="text" id="searchBox" class="form-control" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
+                    <div class="search-container d-flex align-items-center gap-3 mb-3">
+                        <!-- Search Box -->
+                        <input type="text" id="searchBox" class="form-control flex-grow-1" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
+
+                        <div class="dropdowns d-flex gap-3">
+                            <!-- Date Filter -->
+                            <select id="dateFilter" class="form-select">
+                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="yesterday">Yesterday (<?php echo $yesterdayCount; ?>)</option>
+                                <option value="last_week">Last Week (<?php echo $lastWeekCount; ?>)</option>
+                                <option value="last_month">Last Month (<?php echo $lastMonthCount; ?>)</option>
+                            </select>
+
+                            <!-- Engagement Filter -->
+                            <select id="engagementFilter" class="form-select">
+                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="most_liked">Most Liked (<?php echo $mostLikedCount; ?>)</option>
+                                <option value="most_commented">Most Commented (<?php echo $mostCommentedCount; ?>)</option>
+                            </select>
+                        </div>
                     </div>
+
 
                     <div class="row" id="postContainer">
                         <?php while ($row = mysqli_fetch_assoc($result)) {
@@ -257,32 +307,31 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
     <script>
-        $(document).ready(function() {
-            $(".view-likes, .view-comments").on("click", function() {
-                let postId = $(this).data("id");
-                let type = $(this).data("type");
-                let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
+        $(document).on("click", ".view-likes, .view-comments", function() {
+            let postId = $(this).data("id");
+            let type = $(this).data("type");
+            let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
 
-                $("#likeCommentModalLabel").text(modalTitle); // Set modal title
+            $("#likeCommentModalLabel").text(modalTitle); // Set modal title
 
-                $.ajax({
-                    url: "controller/fetch_modal_data.php",
-                    method: "POST",
-                    data: {
-                        post_id: postId,
-                        type: type
-                    },
-                    dataType: "html",
-                    success: function(response) {
-                        $("#modalBody").html(response);
-                        $("#likeCommentModal").modal("show"); // Show modal
-                    },
-                    error: function() {
-                        alert("Error fetching data!");
-                    }
-                });
+            $.ajax({
+                url: "controller/fetch_modal_data.php",
+                method: "POST",
+                data: {
+                    post_id: postId,
+                    type: type
+                },
+                dataType: "html",
+                success: function(response) {
+                    $("#modalBody").html(response);
+                    $("#likeCommentModal").modal("show"); // Show modal
+                },
+                error: function() {
+                    alert("Error fetching data!");
+                }
             });
         });
+
 
 
         function toggleDescription(postId, el) {
@@ -355,6 +404,36 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     $(this).toggle(username.includes(searchText));
                 });
             });
+        });
+
+        $(document).ready(function() {
+            function fetchFilteredPosts() {
+                let dateFilter = $("#dateFilter").val();
+                let engagementFilter = $("#engagementFilter").val();
+
+                $.ajax({
+                    url: "ajax/fetch_posts.php",
+                    method: "GET",
+                    data: {
+                        date: dateFilter,
+                        engagement: engagementFilter
+                    },
+                    success: function(response) {
+                        $("#postContainer").html(response);
+                    },
+                    error: function() {
+                        alert("Error fetching posts!");
+                    }
+                });
+            }
+
+            // Trigger AJAX when filters change
+            $("#dateFilter, #engagementFilter").on("change", function() {
+                fetchFilteredPosts();
+            });
+
+            // Load all posts initially
+            fetchFilteredPosts();
         });
     </script>
 
