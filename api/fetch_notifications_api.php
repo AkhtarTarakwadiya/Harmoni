@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                   COALESCE(u1.user_name, 'System') AS sender_name
                            FROM notifications n
                            LEFT JOIN user_master u1 ON n.sender_id = u1.user_id
-                           WHERE n.user_id = $user_id
+                           WHERE n.user_id = $user_id AND n.TYPE != 4
                            ORDER BY n.created_at DESC";
 
             $result = mysqli_query($conn, $fetchQuery);

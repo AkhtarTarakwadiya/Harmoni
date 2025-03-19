@@ -7,7 +7,19 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 ?>
+<style>
+    .dropdown-list {
+        max-height: 300px;
+        overflow-y: auto;
+        position: relative;
+        width: 350px;
+    }
 
+    .dropdown-menu {
+        max-height: 300px !important;
+        overflow-y: auto !important;
+    }
+</style>
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -30,7 +42,8 @@ if (!isset($_SESSION['admin_id'])) {
             </a>
 
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in dropdown-list"
                 aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                     Notifications Center
@@ -40,8 +53,8 @@ if (!isset($_SESSION['admin_id'])) {
                     <a class="dropdown-item text-center small text-gray-500" href="#">Loading...</a>
                 </div>
 
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Notifications</a>
             </div>
+
         </li>
 
 
@@ -95,11 +108,11 @@ if (!isset($_SESSION['admin_id'])) {
                         let isBold = notif.is_read == 0 ? "font-weight-bold" : "";
 
                         let notificationItem = `
-                        <a class="dropdown-item d-flex align-items-center notification-item" href="#" 
+                        <a class="dropdown-item d-flex align-items-start notification-item" href="#" 
                            data-notification-id="${notif.id}">
-                            <div class="small text-gray-500">${notif.formatted_date}</div>
                             <div>
-                                <span class="${isBold}">${notif.message}</span>
+                                <div class="small text-gray-500">${notif.formatted_date}</div>
+                                <span class="${isBold} d-block">${notif.message}</span>
                             </div>
                         </a>`;
 
@@ -111,6 +124,8 @@ if (!isset($_SESSION['admin_id'])) {
             }
         });
     }
+
+
 
     // Mark notification as read when clicked
     $(document).on("click", ".notification-item", function() {
