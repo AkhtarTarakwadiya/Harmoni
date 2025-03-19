@@ -236,21 +236,39 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             let offset = 0;
             const limit = 20;
 
-            function loadPosts() {
+            function loadPosts(reset = false) {
+                if (reset) {
+                    offset = 0;
+                    $("#postContainer").html(""); // Clear previous results when searching
+                    $("#loadMore").hide(); // Hide initially until more posts exist
+                }
+
                 $.ajax({
                     url: "ajax/fetch_posts.php",
                     method: "GET",
                     data: {
                         offset: offset,
+                        limit: limit,
                         date: $("#dateFilter").val(),
-                        engagement: $("#engagementFilter").val()
+                        engagement: $("#engagementFilter").val(),
+                        search: $("#searchBox").val().trim() // Include search input
                     },
                     success: function(response) {
-                        if (response.trim() === "no_more_posts") {
-                            $("#loadMore").hide(); // Hide button when no more posts
+                        if (response.trim() === "") {
+                            if (offset === 0) {
+                                $("#postContainer").html("<p class='text-center text-muted'>No posts found.</p>");
+                            }
+                            $("#loadMore").hide(); // Hide Load More if no results
                         } else {
                             $("#postContainer").append(response);
                             offset += limit;
+
+                            // Show "Load More" button if there are more posts
+                            if ($(response).length >= limit) {
+                                $("#loadMore").show();
+                            } else {
+                                $("#loadMore").hide();
+                            }
                         }
                     },
                     error: function() {
@@ -259,8 +277,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 });
             }
 
-            // Load initial posts
-            loadPosts();
+            // Load posts initially
+            loadPosts(true);
 
             // Load more posts on button click
             $("#loadMore").on("click", function() {
@@ -269,12 +287,15 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
             // Re-fetch posts when filters change
             $("#dateFilter, #engagementFilter").on("change", function() {
-                offset = 0;
-                $("#postContainer").html(""); // Clear previous posts
-                $("#loadMore").show(); // Show Load More button
-                loadPosts();
+                loadPosts(true);
+            });
+
+            // Search dynamically
+            $("#searchBox").on("keyup", function() {
+                loadPosts(true);
             });
         });
+
 
         $(document).on("click", ".view-likes, .view-comments", function() {
             let postId = $(this).data("id");
@@ -365,15 +386,15 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
 
-        $(document).ready(function() {
-            $("#searchBox").on("keyup", function() {
-                var searchText = $(this).val().toLowerCase();
-                $(".post-card-wrapper").each(function() {
-                    var username = $(this).data("username");
-                    $(this).toggle(username.includes(searchText));
-                });
-            });
-        });
+        // $(document).ready(function() {
+        //     $("#searchBox").on("keyup", function() {
+        //         var searchText = $(this).val().toLowerCase();
+        //         $(".post-card-wrapper").each(function() {
+        //             var username = $(this).data("username");
+        //             $(this).toggle(username.includes(searchText));
+        //         });
+        //     });
+        // });
 
         $(document).ready(function() {
             function fetchFilteredPosts() {

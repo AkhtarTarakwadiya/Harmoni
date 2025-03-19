@@ -3,9 +3,9 @@ include '../database/db.php';
 
 $limit = 20; // Number of posts per batch
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : 'all';
 $engagementFilter = isset($_GET['engagement']) ? $_GET['engagement'] : 'all';
+$searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
 // Base Query
 $query = "
@@ -25,7 +25,12 @@ $query = "
     LEFT JOIN comments_master pc ON p.post_id = pc.post_id
     WHERE p.post_status = 1";
 
-// Apply Date Filter
+// ✅ Apply Search Filter after defining $query
+if (!empty($searchQuery)) {
+    $query .= " AND u.user_name LIKE '%$searchQuery%'";
+}
+
+// ✅ Apply Date Filter
 if ($dateFilter == "yesterday") {
     $query .= " AND DATE(p.created_at) = DATE(NOW() - INTERVAL 1 DAY)";
 } elseif ($dateFilter == "last_week") {
@@ -34,7 +39,7 @@ if ($dateFilter == "yesterday") {
     $query .= " AND p.created_at >= NOW() - INTERVAL 1 MONTH";
 }
 
-// Apply Engagement Filter
+// ✅ Apply Engagement Filter
 if ($engagementFilter == "most_liked") {
     $query .= " GROUP BY p.post_id ORDER BY like_count DESC";
 } elseif ($engagementFilter == "most_commented") {
@@ -43,7 +48,7 @@ if ($engagementFilter == "most_liked") {
     $query .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
 }
 
-// Apply Pagination
+// ✅ Apply Pagination at the end
 $query .= " LIMIT $limit OFFSET $offset";
 
 $result = mysqli_query($conn, $query);
@@ -122,16 +127,28 @@ if (mysqli_num_rows($result) > 0) {
         </div>
 <?php }
 }else {
-    echo "<script>
-        Swal.fire({
-            icon: 'info',
-            title: 'No More Posts',
-            text: 'You have seen all the available posts!',
-            confirmButtonText: 'OK'
-        });
-    </script>";
+    if (!empty($searchQuery)) {
+        // Alert for no search results
+        echo "<script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'No Results Found',
+                text: 'No posts found for this username!',
+                confirmButtonText: 'OK'
+            });
+        </script>";
+    } else {
+        // Alert for no more posts on Load More
+        echo "<script>
+            Swal.fire({
+                icon: 'info',
+                title: 'No More Posts',
+                text: 'You have seen all the available posts!',
+                confirmButtonText: 'OK'
+            });
+        </script>";
+    }
 }
-
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
