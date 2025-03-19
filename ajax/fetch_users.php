@@ -65,7 +65,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <div class="email">Email: '.htmlspecialchars($row['user_email']).'</div>
                         <div class="bio">'.htmlspecialchars($row['user_bio'] ?: 'No bio available').'</div>
                         <div class="stats">
-                            <div style="cursor: pointer;">
+                            <div style="cursor: pointer;" class="view-posts" data-id="'.htmlspecialchars($row['user_id']).'">
                                 <span>'.htmlspecialchars($row['total_posts']).'</span> Posts
                             </div>
                             <div style="cursor: pointer;" class="view-followers" data-id="'.htmlspecialchars($row['user_id']).'" data-type="followers">
@@ -83,3 +83,50 @@ $output .= '</div>'; // Close row div
 
 echo $output;
 ?>
+
+<script>
+    $(document).ready(function() {
+    // Attach event listeners dynamically for Followers and Following modal
+    $(document).on("click", ".view-followers, .view-following", function() {
+        let userId = $(this).data("id");
+        let type = $(this).data("type");
+        let modalTitle = type === "followers" ? "Followers List" : "Following List";
+
+        $("#userListModalLabel").text(modalTitle);
+
+        $.ajax({
+            url: "controller/fetch_users.php",
+            method: "POST",
+            data: { user_id: userId, type: type },
+            dataType: "html",
+            success: function(response) {
+                $("#userList").html(response);
+                $("#userListModal").modal("show"); // Show modal
+            },
+            error: function() {
+                alert("Error fetching users!");
+            }
+        });
+    });
+
+    // Attach event listener for Posts modal
+    $(document).on("click", ".view-posts", function() {
+        let userId = $(this).data("id");
+
+        $.ajax({
+            url: "controller/fetch_user_posts.php", // PHP file to fetch user posts
+            method: "POST",
+            data: { user_id: userId },
+            dataType: "html",
+            success: function(response) {
+                $("#userPostsGrid").html(response);
+                $("#userPostsModal").modal("show"); // Show modal
+            },
+            error: function() {
+                alert("Error fetching posts!");
+            }
+        });
+    });
+});
+
+</script>
