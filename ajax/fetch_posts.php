@@ -15,7 +15,7 @@ $query = "
         u.user_name, 
         p.post_content, 
         p.created_at, 
-        GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ', ') AS media_files,
+        GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ',') AS media_files,
         COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
         COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count  
     FROM posts p

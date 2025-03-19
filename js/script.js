@@ -238,7 +238,7 @@ $(document).ready(function () {
 
                             // **Update the status text in the table dynamically**
                             let statusCell = button.closest('tr').find('td:last');
-                            let blockStatus = button.closest('tr').find('.toggle-block').data('status') == 1 ? "BLOCKED" : "UNBLOCKED";
+                            let blockStatus = button.closest('tr').find('.toggle-block').data('status') == 0 ? "BLOCKED" : "UNBLOCKED";
                             let userStatus = newStatus == 1 ? "ACTIVE" : "INACTIVE";
                             statusCell.text(`${userStatus} | ${blockStatus}`);
                         }
@@ -258,4 +258,3 @@ $(document).ready(function () {
 
 
 });
-
