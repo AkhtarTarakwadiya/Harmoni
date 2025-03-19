@@ -27,7 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "message" => "Post content must be at least 5 characters long"
                 ];
             } else {
-                // Insert Post into `posts` table
+                // Fetch Username from users table
+                $userQuery = "SELECT user_name FROM user_master WHERE user_id = '$user_id'";
+                $userResult = mysqli_query($conn, $userQuery);
+
+                if ($userResult && mysqli_num_rows($userResult) > 0) {
+                    $userRow = mysqli_fetch_assoc($userResult);
+                    $username = $userRow['user_name'];
+                } else {
+                    $response = [
+                        "status" => "201",
+                        "message" => "User not found"
+                    ];
+                    echo json_encode($response);
+                    exit;
+                }
+
+                // Insert Post into posts table
                 $insertPostQuery = "INSERT INTO posts (user_id, post_content) VALUES ('$user_id', '$post_content')";
                 if (!mysqli_query($conn, $insertPostQuery)) {
                     $response = [
@@ -36,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ];
                 } else {
                     $post_id = mysqli_insert_id($conn); // Get the inserted post ID
+                    $post_url = "http://192.168.4.220/Harmoni/showpost.php?id=" . $post_id; // Change this URL based on your website structure
 
                     // Check if media files were uploaded
                     if (!empty($_FILES['media']['name'][0])) {
@@ -84,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
 
-                        // Insert media files into `posts_media_master`
+                        // Insert media files into posts_media_master
                         if (!empty($uploadedFiles)) {
                             foreach ($uploadedFiles as $mediaFile) {
                                 $insertMediaQuery = "INSERT INTO posts_media_master (post_id, media) VALUES ('$post_id', '$mediaFile')";
@@ -93,10 +110,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
 
+                    // Create Notification with Username and Clickable Link
+                    $notificationMessage = "@$username added a new post. <a href='$post_url'>Click here to view</a>";
+                    $notificationMessage = mysqli_real_escape_string($conn, $notificationMessage);
+
+
+                    $notificationQuery = "INSERT INTO notifications (user_id, sender_id, TYPE, post_id, message) 
+                      VALUES ('$user_id', NULL, 4, '$post_id', '$notificationMessage')";
+
+                    mysqli_query($conn, $notificationQuery); // Execute notification insert
+
                     $response = [
                         "status" => "200",
                         "message" => "Post created successfully",
-                        "post_id" => $post_id
+                        "post_id" => $post_id,
+                        "post_url" => $post_url
                     ];
                 }
             }

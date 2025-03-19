@@ -22,7 +22,12 @@ if (isset($_POST['user_id'])) {
         $count = 0;
         echo '<div class="row">';
         while ($row = mysqli_fetch_assoc($result)) {
-            $postImage = "http://192.168.4.220/Harmoni/uploads/posts/" . htmlspecialchars($row['media']);
+            // Fix: Use 'media_files' instead of 'media'
+            $mediaFiles = $row['media_files'] ?? ''; // Null-safe check
+            $mediaArray = explode(',', $mediaFiles); // Convert to array if multiple files exist
+            $postImage = !empty($mediaArray[0]) 
+                ? "http://192.168.4.220/Harmoni/uploads/posts/" . htmlspecialchars($mediaArray[0]) 
+                : "http://192.168.4.220/Harmoni/uploads/default-placeholder.jpg"; // Placeholder if no media found
 
             if ($count % 3 == 0 && $count != 0) {
                 echo '</div><div class="row">';
@@ -32,9 +37,6 @@ if (isset($_POST['user_id'])) {
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <img src="' . $postImage . '" class="card-img-top" alt="Post Image">
-                        <div class="card-body">
-                            <p class="card-text">' . htmlspecialchars(substr($row['post_content'], 0, 50)) . '...</p>
-                        </div>
                     </div>
                 </div>
             ';
