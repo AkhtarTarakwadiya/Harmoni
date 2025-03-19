@@ -142,89 +142,14 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
                     <div class="row" id="postContainer">
-                        <?php while ($row = mysqli_fetch_assoc($result)) {
-                            $post_id = (int)$row['post_id'];
-                            $mediaFiles = !empty($row['media_files'])
-                                ? array_map(fn($file) => "http://192.168.4.220/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
-                                : [];
-                        ?>
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-4 post-card-wrapper" data-username="<?php echo strtolower($row['user_name']); ?>">
-                                <div class="post-card">
-                                    <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <?php if (!empty($mediaFiles)) {
-                                                $totalMedia = count($mediaFiles);
-                                                foreach ($mediaFiles as $index => $media) {
-                                                    $fileExtension = pathinfo($media, PATHINFO_EXTENSION);
-                                            ?>
-                                                    <div class="carousel-item <?php echo $index == 0 ? 'active' : ''; ?>">
-                                                        <?php if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif'])) { ?>
-                                                            <img src="<?php echo htmlspecialchars($media); ?>" alt="Post Image">
-                                                        <?php } elseif (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg'])) { ?>
-                                                            <video controls>
-                                                                <source src="<?php echo htmlspecialchars($media); ?>" type="video/<?php echo $fileExtension; ?>">
-                                                                Your browser does not support the video tag.
-                                                            </video>
-                                                        <?php } ?>
-                                                        <div class="media-count">
-                                                            <span><?php echo ($index + 1) . "/" . $totalMedia; ?></span>
-                                                        </div>
-                                                    </div>
-                                                <?php }
-                                            } else { ?>
-                                                <div class="carousel-item active">
-                                                    <img src="http://192.168.4.220/Harmoni/img/default-post-1.jpeg" alt="No Image Available">
-                                                    <div class="media-count"><span>1/1</span></div>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                        <?php
-                                        $totalMedia = !empty($mediaFiles) ? count($mediaFiles) : 0; // Initialize $totalMedia
-
-                                        if ($totalMedia > 1) { ?>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon"></span>
-                                            </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
-                                                <span class="carousel-control-next-icon"></span>
-                                            </button>
-                                        <?php } ?>
-
-
-                                    </div>
-
-                                    <div class="post-meta">
-                                        <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
-                                        <div class="post-stats">
-                                            <!-- Like Button -->
-                                            <button class="btn btn-sm btn-light view-likes" data-id="<?php echo $row['post_id']; ?>" data-type="likes">
-                                                <i class="fas fa-heart"></i> <?php echo $row['like_count']; ?>
-                                            </button>
-
-                                            <!-- Comment Button -->
-                                            <button class="btn btn-sm btn-light view-comments" data-id="<?php echo $row['post_id']; ?>" data-type="comments">
-                                                <i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?>
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="description" id="desc_<?php echo $row['post_id']; ?>">
-                                        <span id="short_<?php echo $post_id; ?>">
-                                            <?php echo htmlspecialchars(substr($row['post_content'], 0, 50)) . (strlen($row['post_content']) > 50 ? '...' : ''); ?>
-                                        </span>
-                                        <span id="full_<?php echo $post_id; ?>" style="display: none;">
-                                            <?php echo htmlspecialchars($row['post_content']); ?>
-                                        </span>
-                                        <?php if (strlen($row['post_content']) > 50) { ?>
-                                            <span class="see-more" onclick="toggleDescription(<?php echo $post_id; ?>, this)">See More</span>
-                                        <?php } ?>
-                                    </div>
-
-                                </div>
-                            </div>
-                        <?php } ?>
+                        <!-- Posts will be loaded here -->
                     </div>
+
+                    <!-- Load More Button -->
+                    <div class="text-center mt-3">
+                        <button id="loadMore" class="btn btn-primary">Load More</button>
+                    </div>
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -307,6 +232,50 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
     <script>
+        $(document).ready(function() {
+            let offset = 0;
+            const limit = 20;
+
+            function loadPosts() {
+                $.ajax({
+                    url: "ajax/fetch_posts.php",
+                    method: "GET",
+                    data: {
+                        offset: offset,
+                        date: $("#dateFilter").val(),
+                        engagement: $("#engagementFilter").val()
+                    },
+                    success: function(response) {
+                        if (response.trim() === "no_more_posts") {
+                            $("#loadMore").hide(); // Hide button when no more posts
+                        } else {
+                            $("#postContainer").append(response);
+                            offset += limit;
+                        }
+                    },
+                    error: function() {
+                        alert("Error fetching posts!");
+                    }
+                });
+            }
+
+            // Load initial posts
+            loadPosts();
+
+            // Load more posts on button click
+            $("#loadMore").on("click", function() {
+                loadPosts();
+            });
+
+            // Re-fetch posts when filters change
+            $("#dateFilter, #engagementFilter").on("change", function() {
+                offset = 0;
+                $("#postContainer").html(""); // Clear previous posts
+                $("#loadMore").show(); // Show Load More button
+                loadPosts();
+            });
+        });
+
         $(document).on("click", ".view-likes, .view-comments", function() {
             let postId = $(this).data("id");
             let type = $(this).data("type");

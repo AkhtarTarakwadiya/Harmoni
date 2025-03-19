@@ -1,6 +1,9 @@
 <?php
 include '../database/db.php';
 
+$limit = 20; // Number of posts per batch
+$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : 'all';
 $engagementFilter = isset($_GET['engagement']) ? $_GET['engagement'] : 'all';
 
@@ -39,6 +42,9 @@ if ($engagementFilter == "most_liked") {
 } else {
     $query .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
 }
+
+// Apply Pagination
+$query .= " LIMIT $limit OFFSET $offset";
 
 $result = mysqli_query($conn, $query);
 
@@ -115,7 +121,17 @@ if (mysqli_num_rows($result) > 0) {
             </div>
         </div>
 <?php }
-} else {
-    echo "<p class='text-center text-muted'>No posts found.</p>";
+}else {
+    echo "<script>
+        Swal.fire({
+            icon: 'info',
+            title: 'No More Posts',
+            text: 'You have seen all the available posts!',
+            confirmButtonText: 'OK'
+        });
+    </script>";
 }
+
 ?>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
