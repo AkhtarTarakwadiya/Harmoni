@@ -264,7 +264,7 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                     let filterValue = $(this).val();
 
                     $.ajax({
-                        url: "ajax//fetch_users.php",
+                        url: "ajax/fetch_users.php",
                         method: "GET",
                         data: {
                             filter: filterValue

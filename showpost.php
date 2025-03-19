@@ -1,5 +1,36 @@
 <?php
 include 'database/db.php';
+
+// Count all posts
+$allCountQuery = "SELECT COUNT(*) AS total FROM posts WHERE post_status = 1";
+$allCountResult = mysqli_query($conn, $allCountQuery);
+$allCount = mysqli_fetch_assoc($allCountResult)['total'];
+
+// Count yesterday's posts
+$yesterdayQuery = "SELECT COUNT(*) AS total FROM posts WHERE DATE(created_at) = DATE(NOW() - INTERVAL 1 DAY) AND post_status = 1";
+$yesterdayResult = mysqli_query($conn, $yesterdayQuery);
+$yesterdayCount = mysqli_fetch_assoc($yesterdayResult)['total'];
+
+// Count last week's posts
+$lastWeekQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 WEEK AND post_status = 1";
+$lastWeekResult = mysqli_query($conn, $lastWeekQuery);
+$lastWeekCount = mysqli_fetch_assoc($lastWeekResult)['total'];
+
+// Count last month's posts
+$lastMonthQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 MONTH AND post_status = 1";
+$lastMonthResult = mysqli_query($conn, $lastMonthQuery);
+$lastMonthCount = mysqli_fetch_assoc($lastMonthResult)['total'];
+
+// Count Most Liked Posts
+$mostLikedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM likes_master WHERE status = 1";
+$mostLikedResult = mysqli_query($conn, $mostLikedQuery);
+$mostLikedCount = mysqli_fetch_assoc($mostLikedResult)['total'];
+
+// Count Most Commented Posts
+$mostCommentedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM comments_master WHERE comment_status = 1";
+$mostCommentedResult = mysqli_query($conn, $mostCommentedQuery);
+$mostCommentedCount = mysqli_fetch_assoc($mostCommentedResult)['total'];
+
 // Check if a search query is provided
 $searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
@@ -87,94 +118,38 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     </div>
 
                     <!-- Search Box -->
-                    <div class="mb-3">
-                        <input type="text" id="searchBox" class="form-control" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
+                    <div class="search-container d-flex align-items-center gap-3 mb-3">
+                        <!-- Search Box -->
+                        <input type="text" id="searchBox" class="form-control flex-grow-1" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
+
+                        <div class="dropdowns d-flex gap-3">
+                            <!-- Date Filter -->
+                            <select id="dateFilter" class="form-select">
+                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="yesterday">Yesterday (<?php echo $yesterdayCount; ?>)</option>
+                                <option value="last_week">Last Week (<?php echo $lastWeekCount; ?>)</option>
+                                <option value="last_month">Last Month (<?php echo $lastMonthCount; ?>)</option>
+                            </select>
+
+                            <!-- Engagement Filter -->
+                            <select id="engagementFilter" class="form-select">
+                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="most_liked">Most Liked (<?php echo $mostLikedCount; ?>)</option>
+                                <option value="most_commented">Most Commented (<?php echo $mostCommentedCount; ?>)</option>
+                            </select>
+                        </div>
                     </div>
+
 
                     <div class="row" id="postContainer">
-                        <?php while ($row = mysqli_fetch_assoc($result)) {
-                            $post_id = (int)$row['post_id'];
-                            $mediaFiles = !empty($row['media_files'])
-                                ? array_map(fn($file) => "http://192.168.4.220/Harmoni/uploads/posts/" . $file, explode(',', $row['media_files']))
-                                : [];
-                        ?>
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-4 post-card-wrapper" data-username="<?php echo strtolower($row['user_name']); ?>">
-                                <div class="post-card">
-                                    <div id="carousel_<?php echo $post_id; ?>" class="carousel slide post-carousel" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <?php if (!empty($mediaFiles)) {
-                                                $totalMedia = count($mediaFiles);
-                                                foreach ($mediaFiles as $index => $media) {
-                                                    $fileExtension = pathinfo($media, PATHINFO_EXTENSION);
-                                            ?>
-                                                    <div class="carousel-item <?php echo $index == 0 ? 'active' : ''; ?>">
-                                                        <?php if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif'])) { ?>
-                                                            <img src="<?php echo htmlspecialchars($media); ?>" alt="Post Image">
-                                                        <?php } elseif (in_array(strtolower($fileExtension), ['mp4', 'webm', 'ogg'])) { ?>
-                                                            <video controls>
-                                                                <source src="<?php echo htmlspecialchars($media); ?>" type="video/<?php echo $fileExtension; ?>">
-                                                                Your browser does not support the video tag.
-                                                            </video>
-                                                        <?php } ?>
-                                                        <div class="media-count">
-                                                            <span><?php echo ($index + 1) . "/" . $totalMedia; ?></span>
-                                                        </div>
-                                                    </div>
-                                                <?php }
-                                            } else { ?>
-                                                <div class="carousel-item active">
-                                                    <img src="http://192.168.4.220/Harmoni/img/default-post-1.jpeg" alt="No Image Available">
-                                                    <div class="media-count"><span>1/1</span></div>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                        <?php
-                                        $totalMedia = !empty($mediaFiles) ? count($mediaFiles) : 0; // Initialize $totalMedia
-
-                                        if ($totalMedia > 1) { ?>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon"></span>
-                                            </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $post_id; ?>" data-bs-slide="next">
-                                                <span class="carousel-control-next-icon"></span>
-                                            </button>
-                                        <?php } ?>
-
-
-                                    </div>
-
-                                    <div class="post-meta">
-                                        <div class="username">@<?php echo htmlspecialchars($row['user_name']); ?></div>
-                                        <div class="post-stats">
-                                            <!-- Like Button -->
-                                            <button class="btn btn-sm btn-light view-likes" data-id="<?php echo $row['post_id']; ?>" data-type="likes">
-                                                <i class="fas fa-heart"></i> <?php echo $row['like_count']; ?>
-                                            </button>
-
-                                            <!-- Comment Button -->
-                                            <button class="btn btn-sm btn-light view-comments" data-id="<?php echo $row['post_id']; ?>" data-type="comments">
-                                                <i class="fas fa-comment"></i> <?php echo $row['comment_count']; ?>
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="description" id="desc_<?php echo $row['post_id']; ?>">
-                                        <span id="short_<?php echo $post_id; ?>">
-                                            <?php echo htmlspecialchars(substr($row['post_content'], 0, 50)) . (strlen($row['post_content']) > 50 ? '...' : ''); ?>
-                                        </span>
-                                        <span id="full_<?php echo $post_id; ?>" style="display: none;">
-                                            <?php echo htmlspecialchars($row['post_content']); ?>
-                                        </span>
-                                        <?php if (strlen($row['post_content']) > 50) { ?>
-                                            <span class="see-more" onclick="toggleDescription(<?php echo $post_id; ?>, this)">See More</span>
-                                        <?php } ?>
-                                    </div>
-
-                                </div>
-                            </div>
-                        <?php } ?>
+                        <!-- Posts will be loaded here -->
                     </div>
+
+                    <!-- Load More Button -->
+                    <div class="text-center mt-3">
+                        <button id="loadMore" class="btn btn-primary">Load More</button>
+                    </div>
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -258,31 +233,95 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
     <script>
         $(document).ready(function() {
-            $(".view-likes, .view-comments").on("click", function() {
-                let postId = $(this).data("id");
-                let type = $(this).data("type");
-                let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
+            let offset = 0;
+            const limit = 20;
 
-                $("#likeCommentModalLabel").text(modalTitle); // Set modal title
+            function loadPosts(reset = false) {
+                if (reset) {
+                    offset = 0;
+                    $("#postContainer").html(""); // Clear previous results when searching
+                    $("#loadMore").hide(); // Hide initially until more posts exist
+                }
 
                 $.ajax({
-                    url: "controller/fetch_modal_data.php",
-                    method: "POST",
+                    url: "ajax/fetch_posts.php",
+                    method: "GET",
                     data: {
-                        post_id: postId,
-                        type: type
+                        offset: offset,
+                        limit: limit,
+                        date: $("#dateFilter").val(),
+                        engagement: $("#engagementFilter").val(),
+                        search: $("#searchBox").val().trim() // Include search input
                     },
-                    dataType: "html",
                     success: function(response) {
-                        $("#modalBody").html(response);
-                        $("#likeCommentModal").modal("show"); // Show modal
+                        if (response.trim() === "") {
+                            if (offset === 0) {
+                                $("#postContainer").html("<p class='text-center text-muted'>No posts found.</p>");
+                            }
+                            $("#loadMore").hide(); // Hide Load More if no results
+                        } else {
+                            $("#postContainer").append(response);
+                            offset += limit;
+
+                            // Show "Load More" button if there are more posts
+                            if ($(response).length >= limit) {
+                                $("#loadMore").show();
+                            } else {
+                                $("#loadMore").hide();
+                            }
+                        }
                     },
                     error: function() {
-                        alert("Error fetching data!");
+                        alert("Error fetching posts!");
                     }
                 });
+            }
+
+            // Load posts initially
+            loadPosts(true);
+
+            // Load more posts on button click
+            $("#loadMore").on("click", function() {
+                loadPosts();
+            });
+
+            // Re-fetch posts when filters change
+            $("#dateFilter, #engagementFilter").on("change", function() {
+                loadPosts(true);
+            });
+
+            // Search dynamically
+            $("#searchBox").on("keyup", function() {
+                loadPosts(true);
             });
         });
+
+
+        $(document).on("click", ".view-likes, .view-comments", function() {
+            let postId = $(this).data("id");
+            let type = $(this).data("type");
+            let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
+
+            $("#likeCommentModalLabel").text(modalTitle); // Set modal title
+
+            $.ajax({
+                url: "controller/fetch_modal_data.php",
+                method: "POST",
+                data: {
+                    post_id: postId,
+                    type: type
+                },
+                dataType: "html",
+                success: function(response) {
+                    $("#modalBody").html(response);
+                    $("#likeCommentModal").modal("show"); // Show modal
+                },
+                error: function() {
+                    alert("Error fetching data!");
+                }
+            });
+        });
+
 
 
         function toggleDescription(postId, el) {
@@ -347,14 +386,44 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
 
 
+        // $(document).ready(function() {
+        //     $("#searchBox").on("keyup", function() {
+        //         var searchText = $(this).val().toLowerCase();
+        //         $(".post-card-wrapper").each(function() {
+        //             var username = $(this).data("username");
+        //             $(this).toggle(username.includes(searchText));
+        //         });
+        //     });
+        // });
+
         $(document).ready(function() {
-            $("#searchBox").on("keyup", function() {
-                var searchText = $(this).val().toLowerCase();
-                $(".post-card-wrapper").each(function() {
-                    var username = $(this).data("username");
-                    $(this).toggle(username.includes(searchText));
+            function fetchFilteredPosts() {
+                let dateFilter = $("#dateFilter").val();
+                let engagementFilter = $("#engagementFilter").val();
+
+                $.ajax({
+                    url: "ajax/fetch_posts.php",
+                    method: "GET",
+                    data: {
+                        date: dateFilter,
+                        engagement: engagementFilter
+                    },
+                    success: function(response) {
+                        $("#postContainer").html(response);
+                    },
+                    error: function() {
+                        alert("Error fetching posts!");
+                    }
                 });
+            }
+
+            // Trigger AJAX when filters change
+            $("#dateFilter, #engagementFilter").on("change", function() {
+                fetchFilteredPosts();
             });
+
+            // Load all posts initially
+            fetchFilteredPosts();
         });
     </script>
 
