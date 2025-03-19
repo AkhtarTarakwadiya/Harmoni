@@ -25,12 +25,12 @@ $query = "
     LEFT JOIN comments_master pc ON p.post_id = pc.post_id
     WHERE p.post_status = 1";
 
-// ✅ Apply Search Filter after defining $query
+//  Apply Search Filter after defining $query
 if (!empty($searchQuery)) {
     $query .= " AND u.user_name LIKE '%$searchQuery%'";
 }
 
-// ✅ Apply Date Filter
+//  Apply Date Filter
 if ($dateFilter == "yesterday") {
     $query .= " AND DATE(p.created_at) = DATE(NOW() - INTERVAL 1 DAY)";
 } elseif ($dateFilter == "last_week") {
@@ -39,7 +39,7 @@ if ($dateFilter == "yesterday") {
     $query .= " AND p.created_at >= NOW() - INTERVAL 1 MONTH";
 }
 
-// ✅ Apply Engagement Filter
+//  Apply Engagement Filter
 if ($engagementFilter == "most_liked") {
     $query .= " GROUP BY p.post_id ORDER BY like_count DESC";
 } elseif ($engagementFilter == "most_commented") {
@@ -48,7 +48,7 @@ if ($engagementFilter == "most_liked") {
     $query .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
 }
 
-// ✅ Apply Pagination at the end
+//  Apply Pagination at the end
 $query .= " LIMIT $limit OFFSET $offset";
 
 $result = mysqli_query($conn, $query);
@@ -132,7 +132,7 @@ if (mysqli_num_rows($result) > 0) {
         echo "<script>
             Swal.fire({
                 icon: 'warning',
-                title: 'No Results Found',
+                title: 'No User Found',
                 text: 'No posts found for this username!',
                 confirmButtonText: 'OK'
             });

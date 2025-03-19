@@ -125,7 +125,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                         <div class="dropdowns d-flex gap-3">
                             <!-- Date Filter -->
                             <select id="dateFilter" class="form-select">
-                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="" selected>--- Select ---</option>
                                 <option value="yesterday">Yesterday (<?php echo $yesterdayCount; ?>)</option>
                                 <option value="last_week">Last Week (<?php echo $lastWeekCount; ?>)</option>
                                 <option value="last_month">Last Month (<?php echo $lastMonthCount; ?>)</option>
@@ -133,11 +133,12 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
                             <!-- Engagement Filter -->
                             <select id="engagementFilter" class="form-select">
-                                <option value="all">All (<?php echo $allCount; ?>)</option>
+                                <option value="" selected>--- Select ---</option>
                                 <option value="most_liked">Most Liked (<?php echo $mostLikedCount; ?>)</option>
                                 <option value="most_commented">Most Commented (<?php echo $mostCommentedCount; ?>)</option>
                             </select>
                         </div>
+
                     </div>
 
 
