@@ -23,7 +23,7 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     echo '<div class="row">'; 
     while ($row = mysqli_fetch_assoc($result)) {
-        // Set profile image URL
+
         $profileImage = !empty($row['user_profile_photo']) ?
             "http://192.168.4.220/Harmoni" . $row['user_profile_photo'] :
             "http://192.168.4.220/Harmoni/uploads/default_profile.png";
