@@ -15,7 +15,7 @@ $result = mysqli_query($conn, $sql);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Harmoni Admin - Manage Users</title>
-    
+
     <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $sql);
                         <table id="datatable" class="display nowrap" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Sr. No</th>
                                     <th>Profile Pic</th>
                                     <th>Username</th>
                                     <th>Name</th>
@@ -100,6 +100,7 @@ $result = mysqli_query($conn, $sql);
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $i = 1; ?>
                                 <?php while ($row = mysqli_fetch_assoc($result)) {
 
                                     $profileImage = !empty($row['user_profile_photo']) ?
@@ -108,7 +109,7 @@ $result = mysqli_query($conn, $sql);
                                 ?>
 
                                     <tr>
-                                        <td><?php echo $row['user_id']; ?></td>
+                                        <td><?php echo $i++; ?></td>
                                         <td> <img src="<?php echo htmlspecialchars($profileImage); ?>" class="profile-pic" alt="Profile Pic" style="width: 50px; height: 50px">
                                         </td>
                                         <td>@<?php echo htmlspecialchars($row['user_name']); ?></td>

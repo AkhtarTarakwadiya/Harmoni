@@ -74,7 +74,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                         <table id="datatable" class="display">
                             <thead>
                                 <tr>
-                                    <th>Post ID</th>
+                                    <th>Sr. No</th>
                                     <th>User Name</th>
                                     <th>Post Content</th>
                                     <th>Post Media</th>
@@ -82,9 +82,10 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $i = 1; ?>
                                 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                                     <tr>
-                                        <td><?php echo $row['post_id']; ?></td>
+                                        <td><?php echo $i++; ?></td>
                                         <td><?php echo htmlspecialchars($row['user_name']); ?></td>
                                         <td><?php echo htmlspecialchars(substr($row['post_content'], 0, 50)) . '...'; ?></td>
                                         <td>
