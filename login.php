@@ -20,7 +20,7 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                                <img src="img/login.jpeg" width="480px" height="500px" alt="">
+                                <img src="img/login-img.jpg" width="380px" height="400px" style="margin-left: 30px;" alt="">
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
