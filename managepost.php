@@ -35,10 +35,6 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -160,10 +156,21 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     <script src="js/demo/chart-pie-demo.js"></script> -->
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <script src="js/script.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable();
+        });
+    </script>
 
 </body>
 
