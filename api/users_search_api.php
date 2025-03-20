@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method'], $_POST['search_query']) && $_POST['method'] === "search_user") {
         $search_query = trim($_POST['search_query']);
 
-        // Validate input
         if (empty($search_query)) {
             $response = [
                 "status" => "201",

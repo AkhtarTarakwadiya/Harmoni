@@ -31,14 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $row = mysqli_fetch_assoc($checkResult);
                 
                 if ($row['is_read'] == 1) {
-                    // Notification is already marked as read
                     $response = [
                         "status" => "200",
                         "message" => "Notification is already read",
                         "notification_id" => $notification_id
                     ];
                 } else {
-                    // Update notification as read
                     $updateQuery = "UPDATE notifications SET is_read = 1 WHERE id = $notification_id";
 
                     if (mysqli_query($conn, $updateQuery)) {

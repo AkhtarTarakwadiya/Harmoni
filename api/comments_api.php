@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ];
                 } else {
                     $postData = mysqli_fetch_assoc($postResult);
-                    $postOwnerId = $postData['user_id']; // User ID of the post owner
+                    $postOwnerId = $postData['user_id']; 
 
                     // Fetch commenter's username
                     $commenterQuery = "SELECT user_name FROM user_master WHERE user_id = '$user_id'";

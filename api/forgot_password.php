@@ -12,7 +12,6 @@ header("Content-Type: application/json");
 $response = array();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Check if method is provided and correct
     if (!isset($_POST['method']) || $_POST['method'] !== "send_otp") {
         $response = [
             "status" => "201",
@@ -68,8 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'services.harmony.app@gmail.com'; // Change this
-            $mail->Password = 'bzig xgav cfel tqea'; // Use App Password
+            $mail->Username = 'services.harmony.app@gmail.com'; 
+            $mail->Password = 'bzig xgav cfel tqea'; 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 

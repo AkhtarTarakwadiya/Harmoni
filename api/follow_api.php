@@ -6,11 +6,9 @@ $response = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "follow_method") {
         
-        // Collect Input Data
         $follower_id = isset($_POST['follower_id']) ? trim($_POST['follower_id']) : '';
         $following_id = isset($_POST['following_id']) ? trim($_POST['following_id']) : '';
 
-        // Validate Input
         if (empty($follower_id) || empty($following_id)) {
             $response = [
                 "status" => "201",
@@ -29,11 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Convert IDs to integers for safety
         $follower_id = (int) $follower_id;
         $following_id = (int) $following_id;
 
-        // Prevent self-following
         if ($follower_id == $following_id) {
             $response = [
                 "status" => "201",
@@ -64,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row = mysqli_fetch_assoc($checkResult);
             $newStatus = ($row['status'] == 1) ? 0 : 1; // Toggle status (1 → 0, 0 → 1)
 
-            // Update follow status
             $updateQuery = "UPDATE follow_master SET status = $newStatus, followed_at = NOW() WHERE id = " . $row['id'];
             if (mysqli_query($conn, $updateQuery)) {
                 $message = ($newStatus == 1) ? "User followed successfully." : "User unfollowed successfully.";

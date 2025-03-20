@@ -5,7 +5,7 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "create_post") {
-        // Collect Input Data
+
         if (!isset($_POST['user_id']) || !isset($_POST['post_content'])) {
             $response = [
                 "status" => "201",
@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = trim($_POST['user_id']);
             $post_content = trim($_POST['post_content']);
 
-            // Validate user ID (should be a valid number)
             if (!ctype_digit($user_id)) {
                 $response = [
                     "status" => "201",
@@ -27,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "message" => "Post content must be at least 5 characters long"
                 ];
             } else {
-                // Fetch Username from users table
                 $userQuery = "SELECT user_name FROM user_master WHERE user_id = '$user_id'";
                 $userResult = mysqli_query($conn, $userQuery);
 
@@ -51,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "message" => "Failed to create post"
                     ];
                 } else {
-                    $post_id = mysqli_insert_id($conn); // Get the inserted post ID
-                    $post_url = "http://192.168.4.220/Harmoni/showpost.php?id=" . $post_id; // Change this URL based on your website structure
+                    $post_id = mysqli_insert_id($conn); 
+                    $post_url = "http://192.168.4.220/Harmoni/showpost.php?id=" . $post_id; 
 
                     // Check if media files were uploaded
                     if (!empty($_FILES['media']['name'][0])) {
@@ -76,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 break;
                             }
 
-                            // Validate file size
                             if ($fileSize > $maxFileSize) {
                                 $response = [
                                     "status" => "201",
@@ -89,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $newFileName = time() . "_" . basename($fileName);
                             $targetFilePath = $uploadDirectory . $newFileName;
 
-                            // Move uploaded file
                             if (move_uploaded_file($fileTmp, $targetFilePath)) {
                                 $uploadedFiles[] = $newFileName;
                             } else {
@@ -101,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
 
-                        // Insert media files into posts_media_master
                         if (!empty($uploadedFiles)) {
                             foreach ($uploadedFiles as $mediaFile) {
                                 $insertMediaQuery = "INSERT INTO posts_media_master (post_id, media) VALUES ('$post_id', '$mediaFile')";
@@ -118,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $notificationQuery = "INSERT INTO notifications (user_id, sender_id, TYPE, post_id, message) 
                       VALUES ('$user_id', NULL, 4, '$post_id', '$notificationMessage')";
 
-                    mysqli_query($conn, $notificationQuery); // Execute notification insert
+                    mysqli_query($conn, $notificationQuery); 
 
                     $response = [
                         "status" => "200",

@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $post_id = trim($_POST['post_id']);
 
-            // Validate post ID (should be numeric)
             if (!ctype_digit($post_id)) {
                 $response = [
                     "status" => "201",
