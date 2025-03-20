@@ -16,7 +16,7 @@ ob_start(); // Output buffering start
     <title>Harmoni Admin - Dashboard</title>
 
     <!-- Custom fonts for this template-->
-     <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -36,7 +36,7 @@ ob_start(); // Output buffering start
     <div id="wrapper">
 
         <!-- Sidebar Code -->
-        <?php include 'common/side.php';?>
+        <?php include 'common/side.php'; ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -74,6 +74,14 @@ ob_start(); // Output buffering start
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Users Overview</h6>
                                     <div class="dropdown no-arrow">
+                                        <div class="dropdown no-arrow">
+                                            <select id="userYearFilter" class="form-control">
+                                                <option value="2025" selected>Current Year (2025)</option>
+                                                <option value="2024">Last Year (2024)</option>
+                                                <option value="2023">Year 2023</option>
+                                            </select>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -93,7 +101,14 @@ ob_start(); // Output buffering start
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Engagement Overview</h6>
                                     <div class="dropdown no-arrow">
-                                        
+                                        <select id="engagementFilter" class="form-control">
+                                            <option value="all">All Time</option>
+                                            <option value="today">Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="last_week">Last Week</option>
+                                            <option value="last_month">Last Month</option>
+                                        </select>
+
                                     </div>
                                 </div>
                                 <!-- Card Body -->
