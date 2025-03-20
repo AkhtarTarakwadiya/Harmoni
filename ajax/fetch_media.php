@@ -23,9 +23,9 @@ if (isset($_POST['post_id'])) {
         <i class='fas fa-trash-alt'></i>
       </button>";
 
-            echo "</div>"; // Close .media-item
+            echo "</div>"; 
         }
-        echo '</div>'; // Close .media-grid
+        echo '</div>'; 
     } else {
         echo "<p>No media available.</p>";
     }

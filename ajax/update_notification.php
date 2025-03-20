@@ -4,7 +4,7 @@ include '../database/db.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['notification_id'])) {
-    $notification_id = intval($_POST['notification_id']); // Ensure it's an integer
+    $notification_id = intval($_POST['notification_id']); 
 
     $query = "UPDATE notifications SET is_read = 1 WHERE id = $notification_id";
 

@@ -1,13 +1,12 @@
 <?php
 include '../database/db.php';
 
-$limit = 20; // Number of posts per batch
+$limit = 20; 
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : 'all';
 $engagementFilter = isset($_GET['engagement']) ? $_GET['engagement'] : 'all';
 $searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
-// Base Query
 $query = "
     SELECT 
         p.post_id, 
@@ -128,7 +127,7 @@ if (mysqli_num_rows($result) > 0) {
 <?php }
 }else {
     if (!empty($searchQuery)) {
-        // Alert for no search results
+
         echo "<script>
             Swal.fire({
                 icon: 'warning',
@@ -138,7 +137,7 @@ if (mysqli_num_rows($result) > 0) {
             });
         </script>";
     } else {
-        // Alert for no more posts on Load More
+
         echo "<script>
             Swal.fire({
                 icon: 'info',
