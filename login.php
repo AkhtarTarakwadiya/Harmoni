@@ -10,9 +10,10 @@
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-gradient-primary" style="height: 100vh; display:flex; align-items: center;" >
+<body class="bg-gradient-primary">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
@@ -20,7 +21,7 @@
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                                <img src="img/login-img.jpg" width="380px" height="400px" style="margin-left: 30px;" alt="">
+                                <img src="img/login-img.jpg" width="380px" height="400px" alt="">
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">

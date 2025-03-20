@@ -121,14 +121,14 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                                         <div class="email">Email: <?php echo htmlspecialchars($row['user_email']); ?></div>
                                         <div class="bio"><?php echo htmlspecialchars($row['user_bio'] ?: 'No bio available'); ?></div>
                                         <div class="stats">
-                                            <div class="view-posts" style="cursor: pointer;" data-id="<?php echo $row['user_id']; ?>">
+                                            <div class="view-posts" data-id="<?php echo $row['user_id']; ?>">
                                                 <span><?php echo $row['total_posts']; ?></span> Posts
                                             </div>
-                                            <div style="cursor: pointer;" class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
-                                                <span style="cursor: pointer;"><?php echo $row['total_followers']; ?></span> Followers
+                                            <div class="view-followers" data-id="<?php echo $row['user_id']; ?>" data-type="followers">
+                                                <span><?php echo $row['total_followers']; ?></span> Followers
                                             </div>
-                                            <div style="cursor: pointer;" class="view-following" data-id="<?php echo $row['user_id']; ?>" data-type="following">
-                                                <span style="cursor: pointer;"><?php echo $row['total_following']; ?></span> Following
+                                            <div class="view-following" data-id="<?php echo $row['user_id']; ?>" data-type="following">
+                                                <span><?php echo $row['total_following']; ?></span> Following
                                             </div>
                                         </div>
                                     </div>
