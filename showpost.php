@@ -34,7 +34,6 @@ $mostCommentedCount = mysqli_fetch_assoc($mostCommentedResult)['total'];
 // Check if a search query is provided
 $searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
 
-// Base query
 $fetchPostsQuery = "
    SELECT 
     p.post_id, 
@@ -113,8 +112,6 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Show Posts</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
                     <!-- Search Box -->
@@ -240,8 +237,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             function loadPosts(reset = false) {
                 if (reset) {
                     offset = 0;
-                    $("#postContainer").html(""); // Clear previous results when searching
-                    $("#loadMore").hide(); // Hide initially until more posts exist
+                    $("#postContainer").html(""); 
+                    $("#loadMore").hide(); 
                 }
 
                 $.ajax({
@@ -252,14 +249,14 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                         limit: limit,
                         date: $("#dateFilter").val(),
                         engagement: $("#engagementFilter").val(),
-                        search: $("#searchBox").val().trim() // Include search input
+                        search: $("#searchBox").val().trim() 
                     },
                     success: function(response) {
                         if (response.trim() === "") {
                             if (offset === 0) {
                                 $("#postContainer").html("<p class='text-center text-muted'>No posts found.</p>");
                             }
-                            $("#loadMore").hide(); // Hide Load More if no results
+                            $("#loadMore").hide();
                         } else {
                             $("#postContainer").append(response);
                             offset += limit;
@@ -278,10 +275,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 });
             }
 
-            // Load posts initially
             loadPosts(true);
 
-            // Load more posts on button click
             $("#loadMore").on("click", function() {
                 loadPosts();
             });
@@ -303,7 +298,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             let type = $(this).data("type");
             let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
 
-            $("#likeCommentModalLabel").text(modalTitle); // Set modal title
+            $("#likeCommentModalLabel").text(modalTitle); 
 
             $.ajax({
                 url: "controller/fetch_modal_data.php",
@@ -315,7 +310,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 dataType: "html",
                 success: function(response) {
                     $("#modalBody").html(response);
-                    $("#likeCommentModal").modal("show"); // Show modal
+                    $("#likeCommentModal").modal("show"); 
                 },
                 error: function() {
                     alert("Error fetching data!");
@@ -329,17 +324,17 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             var descContainer = document.getElementById("desc_" + postId);
             var shortText = document.getElementById("short_" + postId);
             var fullText = document.getElementById("full_" + postId);
-            var postCard = el.closest(".post-card"); // Get only the clicked card
+            var postCard = el.closest(".post-card"); 
 
             if (shortText.style.display === "none") {
-                // Collapse back
+
                 shortText.style.display = "inline";
                 fullText.style.display = "none";
                 descContainer.classList.remove("expanded");
                 postCard.classList.remove("expanded-card");
                 el.textContent = "See More";
             } else {
-                // Expand only this one
+
                 shortText.style.display = "none";
                 fullText.style.display = "inline";
                 descContainer.classList.add("expanded");
@@ -364,7 +359,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "ajax/delete_comment.php", // Ensure this matches your actual PHP script
+                        url: "ajax/delete_comment.php", 
                         type: "POST",
                         data: {
                             id: commentId
@@ -384,18 +379,6 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 }
             });
         });
-
-
-
-        // $(document).ready(function() {
-        //     $("#searchBox").on("keyup", function() {
-        //         var searchText = $(this).val().toLowerCase();
-        //         $(".post-card-wrapper").each(function() {
-        //             var username = $(this).data("username");
-        //             $(this).toggle(username.includes(searchText));
-        //         });
-        //     });
-        // });
 
         $(document).ready(function() {
             function fetchFilteredPosts() {
@@ -418,12 +401,10 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 });
             }
 
-            // Trigger AJAX when filters change
             $("#dateFilter, #engagementFilter").on("change", function() {
                 fetchFilteredPosts();
             });
 
-            // Load all posts initially
             fetchFilteredPosts();
         });
     </script>
