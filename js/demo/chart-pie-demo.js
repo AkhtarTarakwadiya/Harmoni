@@ -1,10 +1,10 @@
 function fetchPieChartData(period = 'all') {
-  console.log("Fetching data for period:", period); // Debugging log
+  // console.log("Fetching data for period:", period); // Debugging log
 
   fetch(`./ajax/fetch_engagement_pie_chart.php?period=${period}`)
       .then(response => response.json())
       .then(data => {
-          console.log("Response received:", data); // Debugging log
+          // console.log("Response received:", data); // Debugging log
 
           if (data.error) {
               console.error("Error from backend:", data.error);
@@ -57,6 +57,6 @@ fetchPieChartData();
 
 // Change chart when dropdown value changes
 document.getElementById("engagementFilter").addEventListener("change", function () {
-  console.log("Dropdown changed to:", this.value); // Debugging log
+  // console.log("Dropdown changed to:", this.value); // Debugging log
   fetchPieChartData(this.value);
 });

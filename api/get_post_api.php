@@ -5,12 +5,13 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "fetch_posts") {
-        $user_id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0; 
+        $user_id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
 
         $fetchPostsQuery = "SELECT 
                                 p.post_id, 
                                 p.user_id, 
                                 u.user_name, 
+                                u.user_profile_photo,
                                 p.post_content, 
                                 p.created_at, 
                                 GROUP_CONCAT(DISTINCT pm.media) AS media_files,
@@ -69,6 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "post_id" => $post_id,
                         "user_id" => (int)$row['user_id'],
                         "username" => htmlspecialchars($row['user_name']),
+                        "user_profile_photo" => !empty($row['user_profile_photo'])
+                            ? "http://192.168.4.220/Harmoni" . $row['user_profile_photo']
+                            : "http://192.168.4.220/Harmoni/uploads/profile3.webp",
                         "post_content" => htmlspecialchars($row['post_content']),
                         "created_at" => $row['created_at'],
                         "media_files" => $mediaFiles,

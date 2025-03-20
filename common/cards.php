@@ -39,7 +39,7 @@ $conn->close();
                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $active_users ?></div>
                  </div>
                  <div class="col-auto">
-                     <i class="fa-solid fa-users text-gray-800"></i>
+                     <i class="fa-solid fa-users fa-2x text-gray-800"></i>
                  </div>
              </div>
          </div>
@@ -57,7 +57,7 @@ $conn->close();
                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $recent_user ?></div>
                  </div>
                  <div class="col-auto">
-                     <i class="fa-solid fa-user text-gray-800"></i>
+                     <i class="fa-solid fa-user fa-2x text-gray-800"></i>
                  </div>
              </div>
          </div>

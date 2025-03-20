@@ -1,13 +1,13 @@
 function fetchUserChartData(year = '2025') {
-  console.log("Fetching user data for year:", year); // Debugging log
+  // console.log("Fetching user data for year:", year); // Debugging log
 
   fetch(`./ajax/fetch_users_chart.php?year=${year}`)
       .then(response => response.json())
       .then(data => {
-          console.log("Response received:", data); // Debugging log
+          // console.log("Response received:", data); // Debugging log
 
           if (data.error) {
-              console.error("Error from backend:", data.error);
+              // console.error("Error from backend:", data.error);
               return;
           }
 
@@ -76,6 +76,6 @@ fetchUserChartData('2025');
 
 // Change chart when dropdown value changes
 document.getElementById("userYearFilter").addEventListener("change", function () {
-  console.log("Dropdown changed to:", this.value); // Debugging log
+  // console.log("Dropdown changed to:", this.value); // Debugging log
   fetchUserChartData(this.value);
 });
