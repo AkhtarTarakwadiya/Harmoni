@@ -146,7 +146,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
 
                     <!-- Load More Button -->
                     <div class="text-center mt-3">
-                        <button id="loadMore" class="btn btn-primary">Load More</button>
+                        <button id="loadMore" class="btn btn-primary mb-3">Load More</button>
                     </div>
 
                 </div>

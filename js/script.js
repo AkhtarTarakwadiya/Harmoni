@@ -34,7 +34,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#datatable').DataTable();
+    
 
     // Ajax For Show Media of Posts in Modal
     $(document).on("click", ".show-media", function () {
