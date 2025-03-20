@@ -1,7 +1,7 @@
 /* Login page css */
 
 .bg-gradient-primary{
-  /* height: 100vh; */
+  height: 100vh;
   display: flex;
   align-items: center;
 }
