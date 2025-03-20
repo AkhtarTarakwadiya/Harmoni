@@ -6,11 +6,9 @@ $response = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "login_user") {
 
-        // Collect Input Data
         $user_email = trim($_POST['user_email']);
         $user_password = trim($_POST['user_password']);
 
-        // Validation
         if (empty($user_email) || empty($user_password)) {
             $response = [
                 "status" => "201",
@@ -56,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
 
-            // Verify password
             if (password_verify($user_password, $user['user_password'])) {
                 $response = [
                     "status" => "200",

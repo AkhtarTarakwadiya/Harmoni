@@ -5,7 +5,7 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "fetch_posts" && isset($_POST['user_id'])) {
-        $user_id = intval($_POST['user_id']); // Logged-in user ID
+        $user_id = intval($_POST['user_id']); 
 
         $fetchPostsQuery = "SELECT 
                                 p.post_id, 

@@ -7,7 +7,6 @@ $response = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "get_saved_posts") {
 
-        // Collect and Validate User ID
         $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
 
         if (empty($user_id) || !ctype_digit($user_id)) {
@@ -21,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user_id = (int) $user_id;
 
-        // Define the media base path
         $media_base_url = "http://192.168.4.220/Harmoni/uploads/posts/";
 
         // Fetch saved posts with media and post author's username
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mysqli_num_rows($result) > 0) {
             $saved_posts = [];
             while ($row = mysqli_fetch_assoc($result)) {
-                // Convert comma-separated media names into an array
+
                 $media_files = !empty($row['media_urls']) ? explode(',', $row['media_urls']) : [];
 
                 // Add base path to each media file
