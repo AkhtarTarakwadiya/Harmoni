@@ -26,7 +26,7 @@ if (isset($_POST['user_id'])) {
             $mediaArray = explode(',', $mediaFiles);
             $postImage = !empty($mediaArray[0]) 
                 ? "http://192.168.4.220/Harmoni/uploads/posts/" . htmlspecialchars($mediaArray[0]) 
-                : "http://192.168.4.220/Harmoni/uploads/default-placeholder.jpg"; 
+                : "http://192.168.4.220/Harmoni/img/default-post-1.jpeg"; 
 
             if ($count % 3 == 0 && $count != 0) {
                 echo '</div><div class="row">';
