@@ -1,38 +1,68 @@
 $(document).ready(function () {
 
     // Ajax for Login Form
-    $("#loginForm").submit(function (event) {
-        event.preventDefault();
-
-        var email = $("#email").val();
-        var password = $("#password").val();
-
-        $.ajax({
-            url: "controller/admin_login.php",
-            type: "POST",
-            data: { email: email, password: password },
-            dataType: "json",
-            success: function (response) {
-                if (response.status === "success") {
-                    Swal.fire({
-                        title: 'Login Successful!',
-                        text: 'You are being redirected...',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = './index.php';
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Login Failed!',
-                        text: response.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
+    $(document).ready(function () {
+        $("#loginForm").submit(function (event) {
+            event.preventDefault();
+    
+            var email = $("#email").val().trim();
+            var password = $("#password").val().trim();
+            var isValid = true;
+    
+            // Email validation
+            if (email === "") {
+                isValid = false;
+                Swal.fire({
+                    title: "Field Required",
+                    text: "Email is required!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+    
+            // Password validation
+            if (password === "") {
+                isValid = false;
+                Swal.fire({
+                    title: "Field Required",
+                    text: "Password is required!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+    
+            if (isValid) {
+                $.ajax({
+                    url: "controller/admin_login.php",
+                    type: "POST",
+                    data: { email: email, password: password },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status === "success") {
+                            Swal.fire({
+                                title: "Login Successful!",
+                                text: "You are being redirected...",
+                                icon: "success",
+                                confirmButtonText: "OK"
+                            }).then(() => {
+                                window.location.href = "./index.php";
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Login Failed!",
+                                text: response.message,
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }
+                });
             }
         });
     });
+    
 
     
 
