@@ -36,7 +36,7 @@ if (isset($_POST['user_id'])) {
             echo '
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img src="' . $postImage . '" class="card-img-top" alt="Post Image">
+                        <img src="' . $postImage . '" class="card-img-top" style="height: 250px; width: 250px;" alt="Post Image">
                     </div>
                 </div>
             ';
