@@ -15,6 +15,8 @@ $result = mysqli_query($conn, $sql);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Harmoni Admin - Manage Users</title>
+    
+    <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
