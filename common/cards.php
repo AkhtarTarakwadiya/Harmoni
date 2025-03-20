@@ -2,7 +2,7 @@
 include './database/db.php';
 
 // Fetch Total Active Users
-$usersql = "SELECT COUNT(*) as total FROM user_master WHERE user_status = 1";
+$usersql = "SELECT COUNT(*) as total FROM user_master";
 $result = mysqli_query($conn, $usersql);
 $user = mysqli_fetch_assoc($result);
 $active_users = $user['total'];
@@ -35,7 +35,7 @@ $conn->close();
              <div class="row no-gutters align-items-center">
                  <div class="col mr-2">
                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                         Total Active Users</div>
+                         Total Users</div>
                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $active_users ?></div>
                  </div>
                  <div class="col-auto">
