@@ -5,7 +5,7 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "register_user") {
-        // Collect Input Data
+
         $user_name = trim($_POST['user_name']);
         $user_full_name = trim($_POST['user_full_name']);
         $user_email = trim($_POST['user_email']);
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Default profile image if not provided
         if (empty($user_profile_photo)) {
-            $user_profile_photo = "/uploads/profile3.webp";  // Set default image path
+            $user_profile_photo = "/uploads/profile3.webp"; 
         }
 
         $user_bio = isset($_POST['user_bio']) ? trim($_POST['user_bio']) : null;

@@ -1,5 +1,5 @@
 <?php
-include '../database/db.php';  // Database connection
+include '../database/db.php';  
 $response = [];
 
 if (!$conn) {

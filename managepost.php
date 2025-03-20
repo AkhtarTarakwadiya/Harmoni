@@ -38,7 +38,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- DataTables JS -->
-    <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -69,8 +69,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Manage Posts</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+
                     </div>
 
                     <div class="dataTables_wrapper">

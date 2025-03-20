@@ -27,7 +27,6 @@ if (!isset($_SESSION['admin_id'])) {
         <i class="fa fa-bars"></i>
     </button>
 
-    <!-- Topbar Search -->
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
@@ -41,7 +40,6 @@ if (!isset($_SESSION['admin_id'])) {
                 <span id="notificationCounter" class="badge badge-danger badge-counter" style="display: none;"></span>
             </a>
 
-            <!-- Dropdown - Alerts -->
             <!-- Dropdown - Alerts -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in dropdown-list"
                 aria-labelledby="alertsDropdown">
@@ -142,7 +140,7 @@ if (!isset($_SESSION['admin_id'])) {
             success: function(response) {
                 if (response.success) {
                     notificationElement.find("span").removeClass("font-weight-bold");
-                    fetchNotifications(); // Refresh the list and unread count
+                    fetchNotifications(); 
                 }
             }
         });

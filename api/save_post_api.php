@@ -7,11 +7,9 @@ $response = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "save_post_method") {
         
-        // Collect Input Data
         $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
         $post_id = isset($_POST['post_id']) ? trim($_POST['post_id']) : '';
 
-        // Validate Input
         if (empty($user_id) || empty($post_id)) {
             $response = [
                 "status" => "201",
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Check if a save record exists
         $checkQuery = "SELECT save_post_id, status FROM save_posts_master WHERE user_id = $user_id AND post_id = $post_id";
         $checkResult = mysqli_query($conn, $checkQuery);
 
@@ -82,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
             }
         } else {
-            // Insert new save record (if never saved before)
+            // Insert new save record if never saved before
             $insertQuery = "INSERT INTO save_posts_master (user_id, post_id, status) VALUES ($user_id, $post_id, 1)";
             if (mysqli_query($conn, $insertQuery)) {
                 $response = [

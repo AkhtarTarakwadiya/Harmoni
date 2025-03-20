@@ -4,7 +4,6 @@ include '../database/db.php';
 if (isset($_POST['user_id'])) {
     $user_id = intval($_POST['user_id']);
 
-    // Fetch user posts
     $query = "SELECT 
             p.post_id, 
             p.post_content, 
@@ -22,12 +21,12 @@ if (isset($_POST['user_id'])) {
         $count = 0;
         echo '<div class="row">';
         while ($row = mysqli_fetch_assoc($result)) {
-            // Fix: Use 'media_files' instead of 'media'
-            $mediaFiles = $row['media_files'] ?? ''; // Null-safe check
-            $mediaArray = explode(',', $mediaFiles); // Convert to array if multiple files exist
+
+            $mediaFiles = $row['media_files'] ?? ''; 
+            $mediaArray = explode(',', $mediaFiles);
             $postImage = !empty($mediaArray[0]) 
                 ? "http://192.168.4.220/Harmoni/uploads/posts/" . htmlspecialchars($mediaArray[0]) 
-                : "http://192.168.4.220/Harmoni/uploads/default-placeholder.jpg"; // Placeholder if no media found
+                : "http://192.168.4.220/Harmoni/uploads/default-placeholder.jpg"; 
 
             if ($count % 3 == 0 && $count != 0) {
                 echo '</div><div class="row">';
@@ -36,13 +35,13 @@ if (isset($_POST['user_id'])) {
             echo '
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img src="' . $postImage . '" class="card-img-top" alt="Post Image">
+                        <img src="' . $postImage . '" class="card-img-top" style="height: 250px; width: 250px;" alt="Post Image">
                     </div>
                 </div>
             ';
             $count++;
         }
-        echo '</div>'; // Close last row
+        echo '</div>'; 
     } else {
         echo '<p class="text-center">No posts found.</p>';
     }

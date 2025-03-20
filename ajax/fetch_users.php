@@ -79,15 +79,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>';
 }
 
-$output .= '</div>'; // Close row div
+$output .= '</div>'; 
 
 echo $output;
 ?>
 
 <script>
     $(document).ready(function() {
-    // Attach event listeners dynamically for Followers and Following modal
-    $(document).on("click", ".view-followers, .view-following", function() {
+
+        $(document).on("click", ".view-followers, .view-following", function() {
         let userId = $(this).data("id");
         let type = $(this).data("type");
         let modalTitle = type === "followers" ? "Followers List" : "Following List";
@@ -101,7 +101,7 @@ echo $output;
             dataType: "html",
             success: function(response) {
                 $("#userList").html(response);
-                $("#userListModal").modal("show"); // Show modal
+                $("#userListModal").modal("show"); 
             },
             error: function() {
                 alert("Error fetching users!");
@@ -109,18 +109,17 @@ echo $output;
         });
     });
 
-    // Attach event listener for Posts modal
     $(document).on("click", ".view-posts", function() {
         let userId = $(this).data("id");
 
         $.ajax({
-            url: "controller/fetch_user_posts.php", // PHP file to fetch user posts
+            url: "controller/fetch_user_posts.php", 
             method: "POST",
             data: { user_id: userId },
             dataType: "html",
             success: function(response) {
                 $("#userPostsGrid").html(response);
-                $("#userPostsModal").modal("show"); // Show modal
+                $("#userPostsModal").modal("show"); 
             },
             error: function() {
                 alert("Error fetching posts!");

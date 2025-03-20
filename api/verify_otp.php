@@ -5,7 +5,7 @@ header("Content-Type: application/json");
 $response = array();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Check if method is provided and correct
+
     if (!isset($_POST['method']) || $_POST['method'] !== "verify_otp") {
         $response = [
             "status" => "201",
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    // Validate input fields
+    
     if (!isset($_POST['email'], $_POST['otp']) || empty(trim($_POST['email'])) || empty(trim($_POST['otp']))) {
         $response = [
             "status" => "201",
@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email']);
     $otp = trim($_POST['otp']);
 
-    // Get user_id
     $userQuery = "SELECT user_id FROM user_master WHERE user_email = '$email'";
     $result = mysqli_query($conn, $userQuery);
 
@@ -55,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         if (mysqli_num_rows($otpResult) > 0) {
-            // Mark OTP as verified
+
             $updateQuery = "UPDATE otp_verification SET is_verified = 1 WHERE user_id = '$user_id' AND otp_code = '$otp'";
             mysqli_query($conn, $updateQuery);
 

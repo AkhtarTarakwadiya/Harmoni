@@ -5,7 +5,6 @@ ob_start(); // Output buffering start
 
 include 'database/db.php';
 
-// Fetch user data from user_master table
 $sql = "SELECT * FROM user_master";
 $result = mysqli_query($conn, $sql);
 ?>
@@ -24,7 +23,6 @@ $result = mysqli_query($conn, $sql);
 
 
     <style>
-        /* Manage user page css */
         .switch {
             position: relative;
             display: inline-block;
@@ -157,7 +155,6 @@ $result = mysqli_query($conn, $sql);
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <!-- Include SweetAlert -->
     <!-- Include SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

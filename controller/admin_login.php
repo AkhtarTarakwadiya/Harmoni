@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Fetch admin data
     $sql = "SELECT * FROM `admin_master` WHERE `admin_email` = '$email'";
     $result = $conn->query($sql);
 

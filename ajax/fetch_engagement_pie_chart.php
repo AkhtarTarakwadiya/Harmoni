@@ -1,13 +1,12 @@
 <?php
-include '../database/db.php'; // Adjust path as needed
-
+include '../database/db.php';
 header('Content-Type: application/json');
 
 // Query to get engagement counts
 $query = "SELECT 
             (SELECT COUNT(*) FROM likes_master) AS total_likes,
             (SELECT COUNT(*) FROM comments_master) AS total_comments,
-            (SELECT COUNT(*) FROM save_posts_master) AS total_post_saves"; // Assuming you have a shares table
+            (SELECT COUNT(*) FROM save_posts_master) AS total_post_saves"; 
 
 $result = mysqli_query($conn, $query);
 

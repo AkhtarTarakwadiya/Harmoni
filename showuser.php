@@ -1,8 +1,6 @@
 <?php
-// include 'config/db.php';
 include './database/db.php';
 
-// Fetch user data
 $sql = "SELECT 
             user_id,
             user_name, 
@@ -10,7 +8,7 @@ $sql = "SELECT
             user_email, 
             gender, 
             user_profile_photo, 
-            user_bio,  -- Missing comma was here
+            user_bio,  
             (SELECT COUNT(*) FROM posts WHERE user_id = u.user_id AND post_status = 1) AS total_posts,
             (SELECT COUNT(*) FROM follow_master WHERE following_id = u.user_id) AS total_followers,
             (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following 
@@ -155,7 +153,6 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Follower/following modal start -->
     <!-- Followers/Following Modal -->
     <div class="modal fade" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -248,7 +245,7 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                     dataType: "html",
                     success: function(response) {
                         $("#userList").html(response);
-                        $("#userListModal").modal("show"); // Show the modal
+                        $("#userListModal").modal("show");
                     },
                     error: function() {
                         alert("Error fetching users!");
@@ -282,7 +279,7 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                 let userId = $(this).data("id");
 
                 $.ajax({
-                    url: "controller/fetch_user_posts.php", // PHP file to fetch user posts
+                    url: "controller/fetch_user_posts.php", 
                     method: "POST",
                     data: {
                         user_id: userId
@@ -290,7 +287,7 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
                     dataType: "html",
                     success: function(response) {
                         $("#userPostsGrid").html(response);
-                        $("#userPostsModal").modal("show"); // Show modal
+                        $("#userPostsModal").modal("show"); 
                     },
                     error: function() {
                         alert("Error fetching posts!");

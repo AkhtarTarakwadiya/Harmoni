@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Base URL for profile pictures
         $base_url = "http://192.168.4.220/Harmoni";
 
-        // Fetch Following List with Profile Photo
+        // Fetch Following List 
         $fetchFollowing = "SELECT f.following_id, u.user_name, u.user_profile_photo 
                            FROM follow_master f 
                            JOIN user_master u ON f.following_id = u.user_id 

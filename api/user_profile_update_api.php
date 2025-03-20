@@ -5,7 +5,7 @@ $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['method']) && $_POST['method'] === "update_user_profile") {
-        // Collect Input Data
+
         $user_id = trim($_POST['user_id']);
         $user_name = trim($_POST['user_name']);
         $user_full_name = trim($_POST['user_full_name']);
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_path = $upload_dir . $file_name;
 
             if (move_uploaded_file($_FILES['user_profile_photo']['tmp_name'], $file_path)) {
-                $user_profile_photo = "/uploads/" . $file_name; // Store relative path
+                $user_profile_photo = "/uploads/" . $file_name; 
             } else {
                 $response = [
                     "status" => "201",
@@ -34,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Validation
         if (empty($user_id) || empty($user_name) || empty($user_full_name) || empty($user_email) || empty($user_phone_number) || empty($gender)) {
             $response = [
                 "status" => "201",
@@ -62,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Check if user exists
         $checkUserQuery = "SELECT user_id, user_profile_photo FROM user_master WHERE user_id = '$user_id'";
         $result = mysqli_query($conn, $checkUserQuery);
 

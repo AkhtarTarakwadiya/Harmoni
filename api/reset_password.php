@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Check if required fields exist
     if (!isset($_POST['email'], $_POST['password'], $_POST['confirm_password'])) {
         $response = [
             "status" => "201",
@@ -28,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
 
-    // Check if passwords match
     if ($new_password !== $confirm_password) {
         $response = [
             "status" => "201",
@@ -38,10 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Hash the new password
     $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
 
-    // Get user_id
     $userQuery = "SELECT user_id FROM user_master WHERE user_email = '$email'";
     $result = mysqli_query($conn, $userQuery);
 
@@ -54,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $otpResult = mysqli_query($conn, $otpCheck);
 
         if ($otpResult && mysqli_num_rows($otpResult) > 0) {
-            // Update password
+
             $updatePassword = "UPDATE user_master SET user_password = '$hashed_password' WHERE user_id = '$user_id'";
             if (mysqli_query($conn, $updatePassword)) {
-                // Invalidate OTP after password reset
+
                 $invalidateOTP = "UPDATE otp_verification SET is_verified = 2 WHERE user_id = '$user_id'";
                 mysqli_query($conn, $invalidateOTP);
 
