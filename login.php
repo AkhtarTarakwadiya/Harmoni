@@ -12,7 +12,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-primary" style="height: 100vh; display:flex; align-items: center;" >
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
