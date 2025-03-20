@@ -46,6 +46,7 @@ $deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
 
     <title>Harmoni Admin - Show Users</title>
 
+    <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
