@@ -100,10 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 20px;
-        }
         h2 {
             color: #333;
         }
@@ -131,7 +127,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
     <div class="container">
-        <img src="../img/logo-removebg-preview.png" alt="Harmony Logo" class="logo">
         <h2>OTP Verification</h2>
         <p>Your One-Time Password (OTP) for verification is:</p>
         <div class="otp-box">' . $otp . '</div>
