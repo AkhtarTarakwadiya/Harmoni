@@ -1,0 +1,31 @@
+Project Modules & Responsibilities :-
+
+1. Database Design & Backend Development
+
+Akhtar Tarakwadiya
+
+Database Schema Design: Created a well-structured MySQL database with optimized tables for users, posts, comments, likes, and followers.
+Schema Relationships: Established efficient relationships to improve data retrieval and maintain integrity.
+REST API Development: Implemented APIs for:
+User Authentication – Login, registration, and session management.
+Post Management – Creating, editing, and fetching posts (text, image, and video).
+In-App Notifications – Real-time alerts for post likes,new comments, new followers, and new post notifications for admins.
+Followed Users Feed – Fetching posts from followed users.
+Media Handling: Integrated secure file upload & storage for post images and videos.
+Performance Optimization: Optimized SQL queries to enhance API response time and reduce load.
+Testing & Debugging: Conducted thorough API testing using Postman to ensure reliability and efficiency.
+
+2. Admin Panel & Advanced Features
+
+ Pathan Sohel
+
+Admin Panel Development: Designed and implemented a fully responsive, user-friendly admin dashboard for managing users and posts.
+Feature-Rich APIs: Developed APIs for:
+Follow/Unfollow System – Allowing users to manage their connections.
+Like/Unlike Functionality – Enabling user engagement with posts.
+Advanced Filtering & Pagination – Sorting posts based on likes, recency, user-specific, and date range, with pagination for better navigation.
+User & Content Moderation:
+Block/Unblock Users – Managing access control for platform security.
+Post & Comment Moderation – Removing inappropriate content.
+Analytics & Insights: Implemented detailed analytics to track user activity, engagement, and growth trends.
+Forgot Password System: Integrated a secure OTP-based email recovery system for users.
