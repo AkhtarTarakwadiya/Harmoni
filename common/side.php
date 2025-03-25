@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
     <div class="sidebar-brand-icon">
         <img src="img/logo-removebg-preview.png" alt="LOGO" style="width: 60px; height: 60px;">
     </div>
@@ -12,7 +12,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-    <a class="nav-link" href="index.php">
+    <a class="nav-link" href="index">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
 </li>
@@ -35,8 +35,8 @@
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">User Actions:</h6>
-            <a class="collapse-item" href="showuser.php">Show Users</a>
-            <a class="collapse-item" href="manageuser.php">Manage Users</a>
+            <a class="collapse-item" href="showuser">Show Users</a>
+            <a class="collapse-item" href="manageuser">Manage Users</a>
         </div>
     </div>
 </li>
@@ -52,8 +52,8 @@
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Post Utilities:</h6>
-            <a class="collapse-item" href="showpost.php">Show Posts</a>
-            <a class="collapse-item" href="managepost.php">Manage Posts</a>
+            <a class="collapse-item" href="showpost">Show Posts</a>
+            <a class="collapse-item" href="managepost">Manage Posts</a>
         </div>
     </div>
 </li>
