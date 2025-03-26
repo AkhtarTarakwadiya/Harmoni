@@ -1,13 +1,21 @@
 <?php
 session_start();
-include '../database/db.php';
+include '../database/dao.php';
+$dao =  new Dao();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM `admin_master` WHERE `admin_email` = '$email'";
-    $result = $conn->query($sql);
+    // $sql = "SELECT * FROM `admin_master` WHERE `admin_email` = '$email'";
+    // $result = $conn->query($sql);
+
+    $column = 'admin_id, admin_name, admin_email, admin_password';  
+    $table = 'admin_master';
+    $where = 'admin_email = "' . $email . '"';
+    $other = '';
+
+    $result = $dao->select($column, $table, $where, $other);
 
     if ($result->num_rows > 0) {
         $admin = $result->fetch_assoc();

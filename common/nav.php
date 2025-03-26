@@ -1,6 +1,7 @@
 <?php
 session_start();
-include './database/db.php';
+// include './database/dao.php';
+// $dao = new Dao();
 
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ./login');

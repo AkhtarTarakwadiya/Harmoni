@@ -1,11 +1,17 @@
 <?php
-include '../database/db.php';
+include '../database/dao.php';
+$dao = new Dao();
 
 if (isset($_POST['post_id'])) {
     $post_id = intval($_POST['post_id']);
 
-    $query = "SELECT media_id, media FROM posts_media_master WHERE post_id = $post_id";
-    $result = mysqli_query($conn, $query);
+    // $query = "SELECT media_id, media FROM posts_media_master WHERE post_id = $post_id";
+    // $result = mysqli_query($conn, $query);
+
+    $column = 'media_id, media';
+    $table = 'posts_media_master';
+    $where = 'post_id = $post_id';
+    $result = $dao->select($column, $table, $where);
 
     if (mysqli_num_rows($result) > 0) {
         echo '<div class="media-grid">';
@@ -15,7 +21,7 @@ if (isset($_POST['post_id'])) {
 
             echo '<div class="media-item">';
             if (in_array($fileExt, ['jpg', 'jpeg', 'png'])) {
-                echo "<img src='$mediaPath' width='200' height='200' style='display: block;'>";
+                echo "<img src='$mediaPath' width='200' fheight='200' style='display: block;'>";
             } elseif (in_array($fileExt, ['mp4', 'mov'])) {
                 echo "<video width='200' height='200' controls style='display: block;'><source src='$mediaPath' type='video/$fileExt'></video>";
             }
