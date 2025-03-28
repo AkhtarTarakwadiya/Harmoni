@@ -1,6 +1,6 @@
 <?php
 include '../database/dao.php';
-$dao = new Dao();
+$dao = new Dao(); 
 header('Content-Type: application/json');
 
 // Get filter parameter from AJAX request
@@ -34,20 +34,22 @@ switch ($period) {
         break;
 }
 
-// Fetch engagement counts using select function
-$total_likes = $dao->select("COUNT(*) AS total_likes", "likes_master", $dateConditionLikes);
-$total_comments = $dao->select("COUNT(*) AS total_comments", "comments_master", $dateConditionComments);
-$total_post_saves = $dao->select("COUNT(*) AS total_post_saves", "save_posts_master", $dateConditionSaves);
+// Query to get engagement counts based on selected period
+$resultLikes = $dao->select("COUNT(*) AS total_likes", "likes_master", $dateConditionLikes ? $dateConditionLikes : "");
+$resultComments = $dao->select("COUNT(*) AS total_comments", "comments_master", $dateConditionComments ? $dateConditionComments : "");
+$resultSaves = $dao->select("COUNT(*) AS total_post_saves", "save_posts_master", $dateConditionSaves ? $dateConditionSaves : "");
 
-// Get results
-$likes_count = mysqli_fetch_assoc($total_likes)["total_likes"] ?? 0;
-$comments_count = mysqli_fetch_assoc($total_comments)["total_comments"] ?? 0;
-$saves_count = mysqli_fetch_assoc($total_post_saves)["total_post_saves"] ?? 0;
+$rowLikes = mysqli_fetch_assoc($resultLikes);
+$rowComments = mysqli_fetch_assoc($resultComments);
+$rowSaves = mysqli_fetch_assoc($resultSaves);
 
-// Prepare and return JSON response
 $response = [
     "labels" => ["Likes", "Comments", "Saves"],
-    "data" => [$likes_count, $comments_count, $saves_count],
+    "data" => [
+        $rowLikes["total_likes"] ?? 0, 
+        $rowComments["total_comments"] ?? 0, 
+        $rowSaves["total_post_saves"] ?? 0
+    ],
     "colors" => ["#4e73df", "#1cc88a", "#e74a3b"]
 ];
 
