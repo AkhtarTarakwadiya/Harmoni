@@ -1,27 +1,19 @@
 <?php
 include 'database/dao.php';
 
-$dao = new Dao(); // Initialize DAO class
+$dao = new Dao(); 
 
-// Count all posts
 $allCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "post_status = 1"))['total'];
 
-// Count yesterday's posts
 $yesterdayCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "DATE(created_at) = DATE(NOW() - INTERVAL 1 DAY) AND post_status = 1"))['total'];
 
-// Count last week's posts
 $lastWeekCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "created_at >= NOW() - INTERVAL 1 WEEK AND post_status = 1"))['total'];
 
-// Count last month's posts
 $lastMonthCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "created_at >= NOW() - INTERVAL 1 MONTH AND post_status = 1"))['total'];
 
-// Count Most Liked Posts
-$mostLikedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "likes_master", "status = 1"))['total'];
 
-// Count Most Commented Posts
 $mostCommentedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "comments_master", "comment_status = 1"))['total'];
 
-// Check if a search query is provided
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
 $column = "p.post_id, 
@@ -41,12 +33,10 @@ $table = "posts p
 
 $where = "p.post_status = 1";
 
-// Append search condition if needed
 if (!empty($searchQuery)) {
     $where .= " AND u.user_name LIKE '%" . $dao->getConnection()->real_escape_string($searchQuery) . "%'";
 }
 
-// Add GROUP BY and ORDER BY at the end correctly
 $other = "GROUP BY p.post_id ORDER BY p.created_at DESC";
 
 $result = $dao->select($column, $table, $where, $other);

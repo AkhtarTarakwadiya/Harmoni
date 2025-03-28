@@ -2,7 +2,6 @@
 include 'database/dao.php';
 $dao = new Dao();
 
-// Fetch posts using DAO
 $table = "posts p LEFT JOIN user_master u ON p.user_id = u.user_id";
 $columns = "p.post_id, u.user_name, p.post_content";
 $where = "p.post_status = 1";

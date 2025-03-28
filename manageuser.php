@@ -3,12 +3,10 @@
 ob_start(); // Output buffering start
 // session_start();
 
-include 'database/dao.php'; // Include DAO file
+include 'database/dao.php'; 
 
-// Create an instance of the DAO class
 $dao = new Dao();
 
-// Fetch users
 $columns = "*";
 $table = "user_master";
 $result = $dao->select($columns, $table);

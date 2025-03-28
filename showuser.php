@@ -16,7 +16,7 @@ $columns = "user_id,
 
 $table = "user_master u";
 $where = "user_status = 1 AND user_isblock = 1";
-$other = ""; // No additional conditions
+$other = ""; 
 
 $result = $dao->select($columns, $table, $where, $other);
 
