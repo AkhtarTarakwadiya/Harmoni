@@ -1,142 +1,96 @@
 <?php
-include 'database/db.php';
+include 'database/dao.php';
+
+$dao = new Dao(); // Initialize DAO class
 
 // Count all posts
-$allCountQuery = "SELECT COUNT(*) AS total FROM posts WHERE post_status = 1";
-$allCountResult = mysqli_query($conn, $allCountQuery);
-$allCount = mysqli_fetch_assoc($allCountResult)['total'];
+$allCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "post_status = 1"))['total'];
 
 // Count yesterday's posts
-$yesterdayQuery = "SELECT COUNT(*) AS total FROM posts WHERE DATE(created_at) = DATE(NOW() - INTERVAL 1 DAY) AND post_status = 1";
-$yesterdayResult = mysqli_query($conn, $yesterdayQuery);
-$yesterdayCount = mysqli_fetch_assoc($yesterdayResult)['total'];
+$yesterdayCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "DATE(created_at) = DATE(NOW() - INTERVAL 1 DAY) AND post_status = 1"))['total'];
 
 // Count last week's posts
-$lastWeekQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 WEEK AND post_status = 1";
-$lastWeekResult = mysqli_query($conn, $lastWeekQuery);
-$lastWeekCount = mysqli_fetch_assoc($lastWeekResult)['total'];
+$lastWeekCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "created_at >= NOW() - INTERVAL 1 WEEK AND post_status = 1"))['total'];
 
 // Count last month's posts
-$lastMonthQuery = "SELECT COUNT(*) AS total FROM posts WHERE created_at >= NOW() - INTERVAL 1 MONTH AND post_status = 1";
-$lastMonthResult = mysqli_query($conn, $lastMonthQuery);
-$lastMonthCount = mysqli_fetch_assoc($lastMonthResult)['total'];
+$lastMonthCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", "created_at >= NOW() - INTERVAL 1 MONTH AND post_status = 1"))['total'];
 
 // Count Most Liked Posts
-$mostLikedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM likes_master WHERE status = 1";
-$mostLikedResult = mysqli_query($conn, $mostLikedQuery);
-$mostLikedCount = mysqli_fetch_assoc($mostLikedResult)['total'];
+$mostLikedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "likes_master", "status = 1"))['total'];
 
 // Count Most Commented Posts
-$mostCommentedQuery = "SELECT COUNT(DISTINCT post_id) AS total FROM comments_master WHERE comment_status = 1";
-$mostCommentedResult = mysqli_query($conn, $mostCommentedQuery);
-$mostCommentedCount = mysqli_fetch_assoc($mostCommentedResult)['total'];
+$mostCommentedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "comments_master", "comment_status = 1"))['total'];
 
 // Check if a search query is provided
-$searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
+$searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
-$fetchPostsQuery = "
-   SELECT 
-    p.post_id, 
-    p.user_id, 
-    u.user_name, 
-    p.post_content, 
-    p.created_at, 
-    GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ', ') AS media_files,
-    COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
-    COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count  
-FROM posts p
-LEFT JOIN user_master u ON p.user_id = u.user_id
-LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
-LEFT JOIN likes_master pl ON p.post_id = pl.post_id
-LEFT JOIN comments_master pc ON p.post_id = pc.post_id
-WHERE p.post_status = 1";
+$column = "p.post_id, 
+           p.user_id, 
+           u.user_name, 
+           p.post_content, 
+           p.created_at, 
+           GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ', ') AS media_files,
+           COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
+           COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count";
+
+$table = "posts p 
+          LEFT JOIN user_master u ON p.user_id = u.user_id
+          LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
+          LEFT JOIN likes_master pl ON p.post_id = pl.post_id
+          LEFT JOIN comments_master pc ON p.post_id = pc.post_id";
+
+$where = "p.post_status = 1";
 
 // Append search condition if needed
 if (!empty($searchQuery)) {
-    $fetchPostsQuery .= " AND u.user_name LIKE '%$searchQuery%'";
+    $where .= " AND u.user_name LIKE '%" . $dao->getConnection()->real_escape_string($searchQuery) . "%'";
 }
 
 // Add GROUP BY and ORDER BY at the end correctly
-$fetchPostsQuery .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
+$other = "GROUP BY p.post_id ORDER BY p.created_at DESC";
 
-$result = mysqli_query($conn, $fetchPostsQuery);
+$result = $dao->select($column, $table, $where, $other);
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Harmoni Admin - Show Posts</title>
-
     <link rel="shortcut icon" href="img/logo-removebg-preview.png" type="image/x-icon">
-    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <body id="page-top">
-
-    <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
         <?php include 'common/side.php'; ?>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
                 <?php include 'common/nav.php' ?>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Show Posts</h1>
                     </div>
-
-                    <!-- Search Box -->
                     <div class="search-container d-flex align-items-center gap-3 mb-3">
-                        <!-- Search Box -->
                         <input type="text" id="searchBox" class="form-control flex-grow-1" placeholder="Search by username..." value="<?php echo htmlspecialchars($searchQuery); ?>">
-
                         <div class="dropdowns d-flex gap-3">
-                            <!-- Date Filter -->
                             <select id="dateFilter" class="form-select">
                                 <option value="" selected>--- Select ---</option>
                                 <option value="yesterday">Yesterday (<?php echo $yesterdayCount; ?>)</option>
                                 <option value="last_week">Last Week (<?php echo $lastWeekCount; ?>)</option>
                                 <option value="last_month">Last Month (<?php echo $lastMonthCount; ?>)</option>
                             </select>
-
-                            <!-- Engagement Filter -->
                             <select id="engagementFilter" class="form-select">
                                 <option value="" selected>--- Select ---</option>
                                 <option value="most_liked">Most Liked (<?php echo $mostLikedCount; ?>)</option>
                                 <option value="most_commented">Most Commented (<?php echo $mostCommentedCount; ?>)</option>
                             </select>
                         </div>
-
                     </div>
 
 
@@ -238,8 +192,8 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             function loadPosts(reset = false) {
                 if (reset) {
                     offset = 0;
-                    $("#postContainer").html(""); 
-                    $("#loadMore").hide(); 
+                    $("#postContainer").html("");
+                    $("#loadMore").hide();
                 }
 
                 $.ajax({
@@ -250,7 +204,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                         limit: limit,
                         date: $("#dateFilter").val(),
                         engagement: $("#engagementFilter").val(),
-                        search: $("#searchBox").val().trim() 
+                        search: $("#searchBox").val().trim()
                     },
                     success: function(response) {
                         if (response.trim() === "") {
@@ -299,7 +253,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             let type = $(this).data("type");
             let modalTitle = type === "likes" ? "People who liked this post" : "Comments on this post";
 
-            $("#likeCommentModalLabel").text(modalTitle); 
+            $("#likeCommentModalLabel").text(modalTitle);
 
             $.ajax({
                 url: "controller/fetch_modal_data.php",
@@ -311,7 +265,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
                 dataType: "html",
                 success: function(response) {
                     $("#modalBody").html(response);
-                    $("#likeCommentModal").modal("show"); 
+                    $("#likeCommentModal").modal("show");
                 },
                 error: function() {
                     alert("Error fetching data!");
@@ -325,7 +279,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             var descContainer = document.getElementById("desc_" + postId);
             var shortText = document.getElementById("short_" + postId);
             var fullText = document.getElementById("full_" + postId);
-            var postCard = el.closest(".post-card"); 
+            var postCard = el.closest(".post-card");
 
             if (shortText.style.display === "none") {
 
@@ -360,7 +314,7 @@ $result = mysqli_query($conn, $fetchPostsQuery);
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "ajax/delete_comment.php", 
+                        url: "ajax/delete_comment.php",
                         type: "POST",
                         data: {
                             id: commentId

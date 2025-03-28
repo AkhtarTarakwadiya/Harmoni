@@ -5,25 +5,19 @@ $dao = new Dao();
 if (isset($_POST['id'])) {
     $id = (int)$_POST['id'];
 
-    // $query = "UPDATE comments_master SET comment_status = 0 WHERE comment_id = $id";
-
+    // Update comment status instead of deleting it
     $table = 'comments_master';
     $data = ['comment_status' => 0];
-    $where = ['comment_id' => $id];
+    $where = "comment_id = $id"; // `updatedata()` expects where condition as a string
+
     $result = $dao->updatedata($table, $data, $where);
+
     if ($result) {
-        echo "Comment deleted successfully";
+        echo "success";
     } else {
-        echo "Error deleting comment";
+        echo "error";
     }
-
-    // $result = mysqli_query($conn, $query);
-
-    // if ($result) {
-    //     echo "success";
-    // } else {
-    //     echo "error";
-    // }
-
-    // mysqli_close($conn);
+} else {
+    echo "Invalid request";
 }
+?>
