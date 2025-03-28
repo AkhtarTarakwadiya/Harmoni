@@ -13,6 +13,7 @@ $lastMonthCount = mysqli_fetch_assoc($dao->select("COUNT(*) AS total", "posts", 
 
 
 $mostCommentedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "comments_master", "comment_status = 1"))['total'];
+$mostLikedCount = mysqli_fetch_assoc($dao->select("COUNT(DISTINCT post_id) AS total", "likes_master", "status = 1"))['total'];
 
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
