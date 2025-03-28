@@ -1,10 +1,6 @@
 <?php
 include './database/dao.php';
 
-// Create an instance of the connection class
-$db = new connection();
-$conn = $db->connect(); 
-
 $dao = new Dao();
 
 $columns = "user_id, 
