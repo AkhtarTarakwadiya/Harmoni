@@ -8,15 +8,12 @@ $dateFilter = isset($_GET['date']) ? $_GET['date'] : 'all';
 $engagementFilter = isset($_GET['engagement']) ? $_GET['engagement'] : 'all';
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : "";
 
-// Base conditions
 $whereConditions = ["p.post_status = 1"];
 
-// Apply Search Filter
 if (!empty($searchQuery)) {
     $whereConditions[] = "u.user_name LIKE '%" . $dao->getConnection()->real_escape_string($searchQuery) . "%'";
 }
 
-// Apply Date Filter
 if ($dateFilter == "yesterday") {
     $whereConditions[] = "DATE(p.created_at) = DATE(NOW() - INTERVAL 1 DAY)";
 } elseif ($dateFilter == "last_week") {
@@ -25,10 +22,8 @@ if ($dateFilter == "yesterday") {
     $whereConditions[] = "p.created_at >= NOW() - INTERVAL 1 MONTH";
 }
 
-// Convert conditions array into WHERE clause
 $whereClause = !empty($whereConditions) ? implode(" AND ", $whereConditions) : "1";
 
-// Define sorting order based on engagement filter
 $orderClause = "ORDER BY p.created_at DESC";
 if ($engagementFilter == "most_liked") {
     $orderClause = "ORDER BY like_count DESC";
@@ -36,7 +31,6 @@ if ($engagementFilter == "most_liked") {
     $orderClause = "ORDER BY comment_count DESC";
 }
 
-// Fetch posts with DAO
 $columns = "
     p.post_id, 
     p.user_id, 

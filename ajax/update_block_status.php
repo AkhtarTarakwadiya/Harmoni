@@ -1,5 +1,5 @@
 <?php
-include '../database/dao.php'; // Include DAO class
+include '../database/dao.php'; 
 
 header('Content-Type: application/json'); 
 
@@ -8,13 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_isblock = isset($_POST['user_isblock']) ? intval($_POST['user_isblock']) : 0;
 
     if ($user_id > 0) {
-        $dao = new Dao(); // Create DAO instance
+        $dao = new Dao(); 
 
-        // Prepare update data
         $data = ["user_isblock" => $user_isblock];
         $where = "user_id = $user_id";
 
-        // Update user block status
         $result = $dao->updatedata("user_master", $data, $where);
 
         if ($result) {

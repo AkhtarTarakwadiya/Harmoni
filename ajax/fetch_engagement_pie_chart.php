@@ -3,10 +3,8 @@ include '../database/dao.php';
 $dao = new Dao(); 
 header('Content-Type: application/json');
 
-// Get filter parameter from AJAX request
 $period = isset($_GET['period']) ? $_GET['period'] : 'all';
 
-// Define date conditions for filtering
 $dateConditionLikes = "";
 $dateConditionComments = "";
 $dateConditionSaves = "";
@@ -34,7 +32,6 @@ switch ($period) {
         break;
 }
 
-// Query to get engagement counts based on selected period
 $resultLikes = $dao->select("COUNT(*) AS total_likes", "likes_master", $dateConditionLikes ? $dateConditionLikes : "");
 $resultComments = $dao->select("COUNT(*) AS total_comments", "comments_master", $dateConditionComments ? $dateConditionComments : "");
 $resultSaves = $dao->select("COUNT(*) AS total_post_saves", "save_posts_master", $dateConditionSaves ? $dateConditionSaves : "");

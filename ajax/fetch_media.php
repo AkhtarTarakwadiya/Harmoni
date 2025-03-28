@@ -7,7 +7,7 @@ if (isset($_POST['post_id'])) {
 
     $column = 'media_id, media';
     $table = 'posts_media_master';
-    $where = "post_id = $post_id"; // ✅ Fix: Corrected variable interpolation
+    $where = "post_id = $post_id";
 
     $result = $dao->select($column, $table, $where);
 
