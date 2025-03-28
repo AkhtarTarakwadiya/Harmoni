@@ -1,17 +1,22 @@
 <?php
-include '../database/db.php';
+include '../database/dao.php';
+$dao = new Dao();
 
 if (isset($_POST['id'])) {
     $id = (int)$_POST['id'];
 
-    $query = "UPDATE comments_master SET comment_status = 0 WHERE comment_id = $id";
-    $result = mysqli_query($conn, $query);
+    $table = 'comments_master';
+    $data = ['comment_status' => 0];
+    $where = "comment_id = $id";
+    
+    $result = $dao->updatedata($table, $data, $where);
 
     if ($result) {
         echo "success";
     } else {
         echo "error";
     }
-
-    mysqli_close($conn);
+} else {
+    echo "Invalid request";
 }
+?>

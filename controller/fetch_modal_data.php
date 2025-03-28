@@ -1,5 +1,7 @@
 <?php
-include '../database/db.php';
+include '../database/dao.php';
+
+$dao = new Dao();
 
 $type = isset($_POST['type']) ? $_POST['type'] : '';
 $post_id = isset($_POST['post_id']) ? (int)$_POST['post_id'] : 0;
@@ -10,18 +12,16 @@ if (!$post_id || !in_array($type, ['likes', 'comments'])) {
 }
 
 if ($type === 'likes') {
-    $sql = "SELECT u.user_id, u.user_name, u.user_full_name, u.user_profile_photo 
-            FROM likes_master l
-            LEFT JOIN user_master u ON l.user_id = u.user_id
-            WHERE l.post_id = $post_id AND l.status = 1"; 
+    $columns = "u.user_id, u.user_name, u.user_full_name, u.user_profile_photo";
+    $table = "likes_master l LEFT JOIN user_master u ON l.user_id = u.user_id";
+    $where = "l.post_id = $post_id AND l.status = 1";
 } else {
-    $sql = "SELECT c.comment_id, c.comment, u.user_id, u.user_name, u.user_full_name, u.user_profile_photo 
-            FROM comments_master c
-            LEFT JOIN user_master u ON c.user_id = u.user_id
-            WHERE c.post_id = $post_id AND c.comment_status = 1";
+    $columns = "c.comment_id, c.comment, u.user_id, u.user_name, u.user_full_name, u.user_profile_photo";
+    $table = "comments_master c LEFT JOIN user_master u ON c.user_id = u.user_id";
+    $where = "c.post_id = $post_id AND c.comment_status = 1";
 }
 
-$result = mysqli_query($conn, $sql);
+$result = $dao->select($columns, $table, $where);
 
 if (mysqli_num_rows($result) > 0) {
     echo '<ul class="list-group">';

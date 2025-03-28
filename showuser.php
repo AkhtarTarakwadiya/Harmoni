@@ -1,8 +1,9 @@
 <?php
-include './database/db.php';
+include './database/dao.php';
 
-$sql = "SELECT 
-            user_id,
+$dao = new Dao();
+
+$columns = "user_id, 
             user_name, 
             user_full_name, 
             user_email, 
@@ -11,26 +12,23 @@ $sql = "SELECT
             user_bio,  
             (SELECT COUNT(*) FROM posts WHERE user_id = u.user_id AND post_status = 1) AS total_posts,
             (SELECT COUNT(*) FROM follow_master WHERE following_id = u.user_id) AS total_followers,
-            (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following 
-        FROM user_master u 
-        WHERE user_status = 1 AND user_isblock = 1";
+            (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following";
 
-$result = mysqli_query($conn, $sql);
+$table = "user_master u";
+$where = "user_status = 1 AND user_isblock = 1";
+$other = ""; 
+
+$result = $dao->select($columns, $table, $where, $other);
 
 // Fetch counts for each user type
-$activeCountQuery = "SELECT COUNT(*) AS active_count FROM user_master WHERE user_status = 1 AND user_isblock = 1";
-$blockCountQuery = "SELECT COUNT(*) AS block_count FROM user_master WHERE user_isblock = 0";
-$deactiveCountQuery = "SELECT COUNT(*) AS deactive_count FROM user_master WHERE user_status = 0";
-
-// Execute queries
-$activeResult = mysqli_query($conn, $activeCountQuery);
-$blockResult = mysqli_query($conn, $blockCountQuery);
-$deactiveResult = mysqli_query($conn, $deactiveCountQuery);
+$activeCountQuery = $dao->select("COUNT(*) AS active_count", "user_master", "user_status = 1 AND user_isblock = 1");
+$blockCountQuery = $dao->select("COUNT(*) AS block_count", "user_master", "user_isblock = 0");
+$deactiveCountQuery = $dao->select("COUNT(*) AS deactive_count", "user_master", "user_status = 0");
 
 // Fetch counts
-$activeCount = mysqli_fetch_assoc($activeResult)['active_count'];
-$blockCount = mysqli_fetch_assoc($blockResult)['block_count'];
-$deactiveCount = mysqli_fetch_assoc($deactiveResult)['deactive_count'];
+$activeCount = mysqli_fetch_assoc($activeCountQuery)['active_count'];
+$blockCount = mysqli_fetch_assoc($blockCountQuery)['block_count'];
+$deactiveCount = mysqli_fetch_assoc($deactiveCountQuery)['deactive_count'];
 
 ?>
 <!DOCTYPE html>

@@ -3,10 +3,14 @@
 ob_start(); // Output buffering start
 // session_start();
 
-include 'database/db.php';
+include 'database/dao.php'; 
 
-$sql = "SELECT * FROM user_master";
-$result = mysqli_query($conn, $sql);
+$dao = new Dao();
+
+$columns = "*";
+$table = "user_master";
+$result = $dao->select($columns, $table);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +26,6 @@ $result = mysqli_query($conn, $sql);
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="css/style.css">
-
-
 </head>
 
 <body id="page-top">
@@ -79,7 +81,6 @@ $result = mysqli_query($conn, $sql);
                                                 style="color: <?php echo ($row['user_isblock'] == 0) ? 'red' : 'green'; ?>; font-size: 18px; cursor: pointer;"></i>
                                         </td>
 
-
                                         <td>
                                             <?php
                                             $actionText = ($row['user_status'] == 1) ? "Deactivate" : "Activate";
@@ -96,7 +97,6 @@ $result = mysqli_query($conn, $sql);
                                             echo htmlspecialchars("$status | $blockStatus");
                                             ?>
                                         </td>
-
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -107,12 +107,12 @@ $result = mysqli_query($conn, $sql);
             <?php include 'common/footer.php'; ?>
         </div>
     </div>
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/sb-admin-2.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <!-- Include SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -123,8 +123,5 @@ $result = mysqli_query($conn, $sql);
         });
     </script>
     <script src="js/script.js"></script>
-
-
 </body>
-
 </html>

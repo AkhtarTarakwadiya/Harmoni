@@ -1,6 +1,9 @@
 <?php
 include '../database/db.php';
 
+$db = new connection();
+$conn = $db->connect(); 
+
 if (isset($_POST['user_id'])) {
     $user_id = intval($_POST['user_id']);
 

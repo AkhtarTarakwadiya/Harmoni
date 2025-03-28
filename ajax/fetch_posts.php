@@ -1,58 +1,59 @@
 <?php
-include '../database/db.php';
+include '../database/dao.php';
+$dao = new Dao();
 
-$limit = 20; 
+$limit = 20;
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : 'all';
 $engagementFilter = isset($_GET['engagement']) ? $_GET['engagement'] : 'all';
-$searchQuery = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : "";
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : "";
 
-$query = "
-    SELECT 
-        p.post_id, 
-        p.user_id, 
-        u.user_name, 
-        p.post_content, 
-        p.created_at, 
-        GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ',') AS media_files,
-        COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
-        COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count  
-    FROM posts p
+$whereConditions = ["p.post_status = 1"];
+
+if (!empty($searchQuery)) {
+    $whereConditions[] = "u.user_name LIKE '%" . $dao->getConnection()->real_escape_string($searchQuery) . "%'";
+}
+
+if ($dateFilter == "yesterday") {
+    $whereConditions[] = "DATE(p.created_at) = DATE(NOW() - INTERVAL 1 DAY)";
+} elseif ($dateFilter == "last_week") {
+    $whereConditions[] = "p.created_at >= NOW() - INTERVAL 1 WEEK";
+} elseif ($dateFilter == "last_month") {
+    $whereConditions[] = "p.created_at >= NOW() - INTERVAL 1 MONTH";
+}
+
+$whereClause = !empty($whereConditions) ? implode(" AND ", $whereConditions) : "1";
+
+$orderClause = "ORDER BY p.created_at DESC";
+if ($engagementFilter == "most_liked") {
+    $orderClause = "ORDER BY like_count DESC";
+} elseif ($engagementFilter == "most_commented") {
+    $orderClause = "ORDER BY comment_count DESC";
+}
+
+$columns = "
+    p.post_id, 
+    p.user_id, 
+    u.user_name, 
+    p.post_content, 
+    p.created_at, 
+    GROUP_CONCAT(DISTINCT pm.media ORDER BY pm.media_id SEPARATOR ',') AS media_files,
+    COUNT(DISTINCT CASE WHEN pl.status = 1 THEN pl.id END) AS like_count,  
+    COUNT(DISTINCT CASE WHEN pc.comment_status = 1 THEN pc.comment_id END) AS comment_count
+";
+
+$joinTables = "
+    posts p
     LEFT JOIN user_master u ON p.user_id = u.user_id
     LEFT JOIN posts_media_master pm ON p.post_id = pm.post_id
     LEFT JOIN likes_master pl ON p.post_id = pl.post_id
     LEFT JOIN comments_master pc ON p.post_id = pc.post_id
-    WHERE p.post_status = 1";
+";
 
-//  Apply Search Filter after defining $query
-if (!empty($searchQuery)) {
-    $query .= " AND u.user_name LIKE '%$searchQuery%'";
-}
+$otherClauses = "GROUP BY p.post_id $orderClause LIMIT $limit OFFSET $offset";
 
-//  Apply Date Filter
-if ($dateFilter == "yesterday") {
-    $query .= " AND DATE(p.created_at) = DATE(NOW() - INTERVAL 1 DAY)";
-} elseif ($dateFilter == "last_week") {
-    $query .= " AND p.created_at >= NOW() - INTERVAL 1 WEEK";
-} elseif ($dateFilter == "last_month") {
-    $query .= " AND p.created_at >= NOW() - INTERVAL 1 MONTH";
-}
+$result = $dao->select($columns, $joinTables, $whereClause, $otherClauses);
 
-//  Apply Engagement Filter
-if ($engagementFilter == "most_liked") {
-    $query .= " GROUP BY p.post_id ORDER BY like_count DESC";
-} elseif ($engagementFilter == "most_commented") {
-    $query .= " GROUP BY p.post_id ORDER BY comment_count DESC";
-} else {
-    $query .= " GROUP BY p.post_id ORDER BY p.created_at DESC";
-}
-
-//  Apply Pagination at the end
-$query .= " LIMIT $limit OFFSET $offset";
-
-$result = mysqli_query($conn, $query);
-
-// Return Filtered Posts
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $post_id = (int)$row['post_id'];
@@ -125,9 +126,8 @@ if (mysqli_num_rows($result) > 0) {
             </div>
         </div>
 <?php }
-}else {
+} else {
     if (!empty($searchQuery)) {
-
         echo "<script>
             Swal.fire({
                 icon: 'warning',
@@ -137,7 +137,6 @@ if (mysqli_num_rows($result) > 0) {
             });
         </script>";
     } else {
-
         echo "<script>
             Swal.fire({
                 icon: 'info',

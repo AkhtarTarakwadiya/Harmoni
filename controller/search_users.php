@@ -1,24 +1,27 @@
-<?php
-include '../database/db.php';
+<?php 
+include '../database/dao.php';
+
+$dao = new Dao(); 
+$conn = $dao->getConnection(); 
 
 $search = isset($_GET['query']) ? mysqli_real_escape_string($conn, $_GET['query']) : '';
 
-$sql = "SELECT 
-            user_name, 
-            user_full_name, 
-            user_email, 
-            gender, 
-            user_profile_photo, 
-            user_bio,  
-            (SELECT COUNT(*) FROM posts WHERE user_id = u.user_id AND post_status = 1) AS total_posts,
-            (SELECT COUNT(*) FROM follow_master WHERE following_id = u.user_id) AS total_followers,
-            (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following 
-        FROM user_master u 
-        WHERE (user_name LIKE '%$search%' OR user_full_name LIKE '%$search%') 
-        AND user_status = 1 
-        AND user_isblock = 1";
+$column = "user_name, 
+           user_full_name, 
+           user_email, 
+           gender, 
+           user_profile_photo, 
+           user_bio,  
+           (SELECT COUNT(*) FROM posts WHERE user_id = u.user_id AND post_status = 1) AS total_posts,
+           (SELECT COUNT(*) FROM follow_master WHERE following_id = u.user_id) AS total_followers,
+           (SELECT COUNT(*) FROM follow_master WHERE follower_id = u.user_id) AS total_following";
 
-$result = mysqli_query($conn, $sql);
+$table = "user_master u";
+$where = "(user_name LIKE '%$search%' OR user_full_name LIKE '%$search%') 
+          AND user_status = 1 
+          AND user_isblock = 1";
+
+$result = $dao->select($column, $table, $where);
 
 if (mysqli_num_rows($result) > 0) {
     echo '<div class="row">'; 

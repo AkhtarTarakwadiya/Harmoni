@@ -1,6 +1,9 @@
 <?php
 include '../database/db.php';
 
+$db = new connection();
+$conn = $db->connect(); 
+
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'active';
 
 if ($filter == 'active') {
@@ -49,7 +52,7 @@ if ($filter == 'active') {
 
 $result = mysqli_query($conn, $sql);
 
-$output = '<div class="row">'; // Start row div
+$output = '<div class="row">'; 
 
 while ($row = mysqli_fetch_assoc($result)) {
     $profileImage = !empty($row['user_profile_photo']) ? 

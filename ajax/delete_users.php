@@ -1,19 +1,35 @@
 <?php
-include '../database/db.php';
+include '../database/dao.php';
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userId = intval($_POST['user_id']); 
-    $newStatus = intval($_POST['user_status']);
+    $userId = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+    $newStatus = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
 
-    $sql = "UPDATE user_master SET user_status = $newStatus WHERE user_id = $userId";
-    $result = mysqli_query($conn, $sql);
+    if ($userId > 0) {
+        $dao = new Dao();
 
-    if ($result) {
-        echo json_encode(["status" => "success"]);
+        $table = 'user_master';
+        $data = ['user_status' => $newStatus];
+        $where = "user_id = $userId";
+
+        $result = $dao->updatedata($table, $data, $where);
+
+        if ($result) {
+            echo json_encode(["status" => "success", "message" => "User status updated successfully"]);
+            exit; 
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to update user status"]);
+            exit;
+        }
     } else {
-        echo json_encode(["status" => "error", "message" => "Failed to update user status"]);
+        echo json_encode(["status" => "error", "message" => "Invalid user ID"]);
+        exit;
     }
-
-    mysqli_close($conn);
+} else {
+    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
+    exit;
 }
 ?>

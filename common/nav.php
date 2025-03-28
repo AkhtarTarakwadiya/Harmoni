@@ -1,9 +1,10 @@
 <?php
 session_start();
-include './database/db.php';
+// include './database/dao.php';
+// $dao = new Dao();
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: /Harmoni/login.php');
+    header('Location: ./login');
     exit();
 }
 ?>
@@ -69,7 +70,7 @@ if (!isset($_SESSION['admin_id'])) {
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="./logout.php">
+                <a class="dropdown-item" href="logout">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                 </a>
