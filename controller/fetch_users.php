@@ -1,7 +1,6 @@
 <?php
 include '../database/db.php';
 
-// Initialize database connection
 $db = new connection();
 $conn = $db->connect(); 
 

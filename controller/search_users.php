@@ -1,13 +1,11 @@
 <?php 
 include '../database/dao.php';
 
-$dao = new Dao(); // Initialize Dao class
-$conn = $dao->getConnection(); // Get MySQLi connection
+$dao = new Dao(); 
+$conn = $dao->getConnection(); 
 
-// Get search query and sanitize it properly
 $search = isset($_GET['query']) ? mysqli_real_escape_string($conn, $_GET['query']) : '';
 
-// Define columns and query structure
 $column = "user_name, 
            user_full_name, 
            user_email, 
@@ -23,7 +21,6 @@ $where = "(user_name LIKE '%$search%' OR user_full_name LIKE '%$search%')
           AND user_status = 1 
           AND user_isblock = 1";
 
-// Execute query using Dao function
 $result = $dao->select($column, $table, $where);
 
 if (mysqli_num_rows($result) > 0) {
