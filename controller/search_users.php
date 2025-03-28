@@ -1,6 +1,10 @@
 <?php
 include '../database/db.php';
 
+// Initialize database connection
+$db = new connection();
+$conn = $db->connect(); 
+
 $search = isset($_GET['query']) ? mysqli_real_escape_string($conn, $_GET['query']) : '';
 
 $sql = "SELECT 

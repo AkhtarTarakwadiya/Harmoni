@@ -1,6 +1,10 @@
 <?php
 include '../database/db.php';
 
+// Initialize database connection
+$db = new connection();
+$conn = $db->connect(); 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = intval($_POST['user_id']);
     $type = $_POST['type'];

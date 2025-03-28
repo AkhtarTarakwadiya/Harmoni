@@ -1,6 +1,10 @@
 <?php
 include '../database/db.php';
 
+// Initialize database connection
+$db = new connection();
+$conn = $db->connect(); 
+
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'active';
 
 if ($filter == 'active') {
