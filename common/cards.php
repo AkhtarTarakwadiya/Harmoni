@@ -2,12 +2,6 @@
 include './database/dao.php';
 $dao = new Dao();
 
-// Fetch Total Active Users
-// $usersql = "SELECT COUNT(*) as total FROM user_master";
-// $result = mysqli_query($conn, $usersql);
-// $user = mysqli_fetch_assoc($result);
-// $active_users = $user['total'];
-
 $column = 'COUNT(*) as total';
 $table = 'user_master';
 $where = '';
@@ -20,13 +14,6 @@ if ($users && $users->num_rows > 0) {
     $active_users = 0;
 }
 
-
-// Fetch Recent User
-// $recent_usersql = "SELECT user_name FROM user_master WHERE user_status = 1 ORDER BY user_id DESC LIMIT 1";
-// $result = mysqli_query($conn, $recent_usersql);
-// $user = mysqli_fetch_assoc($result);
-// $recent_user = $user['user_name'];
-
 $column = 'user_name';
 $table = 'user_master';
 $where = 'user_status = 1';
@@ -38,12 +25,6 @@ if ($recent_users && $recent_users->num_rows > 0) {
     $recent_user = 'No User Found';
 }
 
-// Fetch Total Posts
-// $postsql = "SELECT COUNT(*) as total FROM posts WHERE post_status = 1";
-// $result = mysqli_query($conn, $postsql);
-// $post = mysqli_fetch_assoc($result);
-// $total_posts = $post['total'];
-
 $column = 'COUNT(*) as total';
 $table = 'posts';
 $where = 'post_status = 1';
@@ -54,14 +35,8 @@ if ($posts && $posts->num_rows > 0) {
     $total_posts = 0;
 }
 
-// Recent Posts
-// $recent_postsql = "SELECT user_name FROM user_master LEFT JOIN posts ON user_master.user_id = posts.user_id WHERE user_status = 1 ORDER BY post_id DESC LIMIT 1";
-// $result = mysqli_query($conn, $recent_postsql);
-// $post = mysqli_fetch_assoc($result);
-// $recent_post = $post['user_name'];
-
 $column = 'user_name';
-$table = 'user_master LEFT JOIN posts ON user_master.user_id = posts.user_id'; 
+$table = 'user_master LEFT JOIN posts ON user_master.user_id = posts.user_id';
 $where = 'user_status = 1';
 $other = 'ORDER BY post_id DESC LIMIT 1';
 
@@ -74,7 +49,6 @@ if ($recent_post_users && $recent_post_users->num_rows > 0) {
 }
 
 
-// $conn->close();
 ?>
 
 <!-- Total Users Card Example -->
