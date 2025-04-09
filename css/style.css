@@ -1,0 +1,543 @@
+/* Login page css */
+
+#log-card{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+#log-card img{
+  margin-left: 30px;
+}
+/* Login page css end */
+
+
+/* Manage user css */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: #007bff;
+}
+
+input:checked+.slider:before {
+  transform: translateX(14px);
+}
+
+#datatable{
+  width: 100%;
+}
+
+td img {
+  height: 50px;
+  width: 50px;
+}
+/* Manage user css */
+
+
+/* show user page css */
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  color: #333;
+}
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #007bff;
+}
+.username {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #007bff;
+}
+.fullname {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+.email {
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
+}
+.bio {
+  font-size: 14px;
+  font-style: italic;
+  color: #555;
+  margin-top: 5px;
+}
+.gender {
+  font-size: 14px;
+  font-weight: bold;
+  background: #f8f9fa;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+.stats div {
+  text-align: center;
+}
+.stats span {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between elements */
+  flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.search input {
+  flex: 1; /* Allows input to take available space */
+  min-width: 200px; /* Prevents input from shrinking too much */
+  border: 2px solid #007bff; /* Blue border */
+}
+
+.search select {
+  width: 200px; /* Default width */
+  min-width: 150px;
+  padding: 8px 12px;
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Focus effect */
+.search select:focus {
+  border-color: #0056b3;
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* Hover effect */
+.search select:hover {
+  background-color: #e9ecef;
+}
+
+/* Dropdown option styling */
+.search select option {
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 576px) { 
+  .search select {
+      width: 100%; /* Smaller width on mobile */
+      font-size: 14px; /* Reduce font size */
+      padding: 6px 10px; /* Adjust padding */
+  }
+} 
+
+.view-posts, .view-followers, .view-following{
+  cursor: pointer;
+}
+
+/*  */
+
+
+
+/* Container for search and dropdowns */
+.search-container {
+  display: flex;
+  /* flex-wrap: wrap; */
+  align-items: center;
+  gap: 10px;
+}
+
+/* Search Box */
+#searchBox {
+  flex-grow: 1;
+  min-width: 250px;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* Dropdown Container */
+.dropdowns {
+  display: flex;
+  gap: 10px;
+}
+
+/* Dropdown Styling */
+.dropdowns select {
+  min-width: 180px;
+  max-width: 220px;
+  padding: 8px 12px;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Responsive - Stack Search + Dropdowns on tablets & mobile */
+@media (max-width: 992px) {
+  .search-container {
+    flex-direction: column;
+  }
+
+  #searchBox {
+    width: 100%; /* Search box takes full width */
+  }
+
+  .dropdowns {
+    width: 100%; /* Dropdowns take full width */
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dropdowns select {
+    flex: 1; /* Both dropdowns take equal space */
+    max-width: none; /* Allow them to stretch */
+  }
+}
+
+/* On very small screens (phones below 576px) - Stack everything */
+@media (max-width: 576px) {
+  .dropdowns {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/*  */
+
+/* show user page css end */
+
+/* Datatable css */
+
+.dataTables_wrapper {
+  overflow-x: auto; /* Allows horizontal scrolling */
+  width: 100%;
+}
+
+#datatable {
+  white-space: nowrap; /* Prevents text from wrapping inside cells */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead {
+  background-color: #007bff;
+  color: white;
+  text-align: left;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+  background-color: #cce5ff;
+  transition: 0.3s;
+}
+/* datatable css end */
+
+
+/* Ensure uniform card size and dynamic height */
+.post-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto; /* Allow cards to expand naturally */
+  min-height: 350px; /* Keeps all cards uniform in size */
+}
+
+/* Ensure all cards remain equal in size */
+.post-card.expanded {
+  min-height: auto;
+}
+
+.post-card.expanded-card {
+  min-height: auto; /* Only this card will expand */
+}
+
+/* Prevent flexbox from squishing small description cards */
+.post-card .description {
+  flex-grow: 1;
+  min-height: 50px;
+}
+
+/* Hover effect */
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Image & Video - Maintain 3:4 aspect ratio */
+.post-carousel img,
+.post-carousel video {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* Ensures a fixed ratio for all images/videos */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Ensure proper aspect ratio for larger screens */
+@media (min-width: 992px) {
+  .post-carousel img,
+  .post-carousel video {
+      height: auto;
+  }
+}
+
+/* Media count display */
+.media-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+/* Remove default Bootstrap carousel button background */
+.carousel-control-prev,
+.carousel-control-next {
+  width: auto;
+  background: none;
+  border: none;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
+/* Username styling */
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin-top: 10px;
+}
+/* Reduce font size for medium screens (laptops, 1024px width) */
+@media (max-width: 1024px) {
+  .username {
+      font-size: 14px;
+  }
+}
+
+/* Further reduce font size for extra small screens (220px width) */
+@media (max-width: 320px) {
+  .username {
+      font-size: 14px;
+  }
+}
+
+/* Post meta section - username and post stats */
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Post stats (likes/comments) */
+.post-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.post-stats span {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+.post-stats i {
+  color: #ff4757;
+}
+
+/* Description styling */
+/* Description styling */
+.description {
+  font-size: 14px;
+  color: #555;
+  overflow: hidden;
+  max-height: 50px;
+  transition: max-height 0.3s ease-in-out;
+  position: relative;
+}
+
+/* Expand only this description */
+.description.expanded {
+  max-height: none;
+}
+
+/* See More button */
+.see-more {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.see-more:hover {
+  text-decoration: underline;
+}
+
+
+/* Manage user page css */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #007bff;
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Ensure exactly two items per row */
+  gap: 10px;
+  justify-content: center;
+}
+.media-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  padding: 10px;
+}
+.delete-media {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Responsive: One item per row on small screens */
+@media (max-width: 480px) {
+  .media-grid {
+    grid-template-columns: repeat(1, 1fr); /* One item per row in mobile view */
+  }
+}
+
+/* Mange user page css end */
